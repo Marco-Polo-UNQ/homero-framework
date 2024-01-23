@@ -14,5 +14,6 @@ static func w(message: String) -> void:
 
 static func e(message: String) -> void:
 	push_error(_log_format % message)
+	print_stack()
 
 

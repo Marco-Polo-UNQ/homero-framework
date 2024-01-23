@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://ekvbgkngyo52"]
+
+[ext_resource type="Script" path="res://addons/homero_framework/src/core/components/debug/screen_debug_view.gd" id="1_1buk2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_61taj"]
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="ScreenDebugView" type="CanvasLayer"]
+script = ExtResource("1_1buk2")
+
+[node name="FPS" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "fps: %s"
+label_settings = SubResource("LabelSettings_61taj")
