@@ -65,12 +65,6 @@ func _physics_process(delta: float) -> void:
 		# Ground movement (higher acceleration).
 		apply_central_force(dir * move_speed)
 		
-		#var h_velocity: Vector3 = Vector3(
-			#linear_velocity.x,
-			#0.0,
-			#linear_velocity.y
-		#).normalized()
-		
 		if dir != Vector3.ZERO:
 			dir_list.push_front(dir)
 			dir_accum += dir
@@ -101,14 +95,14 @@ func _physics_process(delta: float) -> void:
 			dir_accum
 		])
 		
-		Vector3( 1.0, -0.0, -0.0 ) == Vector3( 1.0, 0.0, 0.0 )
-		
 		floor_step_shape_cast_3d.target_position.x = dir.x * 0.05
 		floor_step_shape_cast_3d.target_position.z = dir.z * 0.05
 		
 		if Input.is_action_just_pressed("jump"):
 			linear_velocity.y = jump_force
-		elif floor_step_shape_cast_3d.is_colliding() && dir_accum.normalized().dot(dir) > 0.75 && dir_accum.length_squared() >= dir_accum_threshold:
+		elif floor_step_shape_cast_3d.is_colliding() && \
+		dir_accum.normalized().dot(dir) > 0.75 && \
+		dir_accum.length_squared() >= dir_accum_threshold:
 			step_shape_cast_3d.target_position = dir * 0.15
 			step_shape_cast_3d.force_shapecast_update()
 			if step_shape_cast_3d.is_colliding():
