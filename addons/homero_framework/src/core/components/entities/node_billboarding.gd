@@ -5,5 +5,6 @@ extends Node3D
 
 
 func _process(delta: float) -> void:
-	look_at(camera.global_position, Vector3.UP, true)
+	var camera_look: Vector3 = camera.basis.y
+	look_at(camera.global_position, camera_look, true)
 
