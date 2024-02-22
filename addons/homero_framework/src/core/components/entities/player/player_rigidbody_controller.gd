@@ -1,8 +1,14 @@
 extends RigidBody3D
 
+@export_category("Debug")
+@export var log_movement: bool
+@export var visible_arrows: bool
+
+@export_category("Movement")
 @export var move_speed: float
 @export var jump_force: float
 @export var step_jump_force: float
+
 
 @onready var floor_step_shape_cast_3d: ShapeCast3D = $FloorStepShapeCast3D
 @onready var step_shape_cast_3d: ShapeCast3D = $StepShapeCast3D
@@ -58,16 +64,19 @@ func _physics_process(delta: float) -> void:
 	
 	var cam_basis: Basis = camera.global_basis
 	var dot_camera: float = cam_basis.y.dot(global_basis.y)
-	if dot_camera < -0.1 || dot_camera > 0.1:
-		dir = cam_basis * dir
+	if dot_camera > -0.1 || dot_camera < 0.1:
+		cam_basis = cam_basis.rotated(cam_basis.x, -cam_basis.get_euler().x)
+	dir = cam_basis * dir
 	
-	camera_basis_arrow.look_at(camera_basis_arrow.global_position - camera.global_basis.y)
+	camera_basis_arrow.visible = visible_arrows
+	if visible_arrows:
+		camera_basis_arrow.look_at(camera_basis_arrow.global_position - camera.global_basis.y)
 	
-	direction_arrow.visible = has_input
+	direction_arrow.visible = has_input && visible_arrows
 	if direction_arrow.visible:
 		direction_arrow.look_at(direction_arrow.global_position - dir, camera.global_basis.y)
 	
-	velocity_arrow.visible = !linear_velocity.is_equal_approx(Vector3.ZERO)
+	velocity_arrow.visible = !linear_velocity.is_equal_approx(Vector3.ZERO) && visible_arrows
 	if velocity_arrow.visible:
 		var dot: float = linear_velocity.normalized().dot(-gravity_direction)
 		if dot > -1.0 && dot < 1.0:
@@ -76,23 +85,24 @@ func _physics_process(delta: float) -> void:
 	
 	dir = (dir * Vector3(1.0, 0.0, 1.0)).normalized()
 	
-	direction_final_arrow.visible = has_input
+	direction_final_arrow.visible = has_input && visible_arrows
 	if direction_final_arrow.visible:
 		direction_final_arrow.look_at(direction_final_arrow.global_position - dir, -gravity_direction)
 	
-	absolute_up_arrow.look_at(absolute_up_arrow.global_position - Vector3.UP, Vector3.FORWARD)
+	absolute_up_arrow.visible = visible_arrows
+	if visible_arrows:
+		absolute_up_arrow.look_at(absolute_up_arrow.global_position - Vector3.UP, Vector3.FORWARD)
 	
 	if dir.is_normalized() && !Vector3.UP.is_equal_approx(-gravity_direction) && !Vector3.DOWN.is_equal_approx(-gravity_direction):
 		dir = rotate_to_plane(dir, gravity_direction)
 	
-	direction_projected_arrow.visible = has_input
+	direction_projected_arrow.visible = has_input && visible_arrows
 	if direction_projected_arrow.visible:
 		direction_projected_arrow.look_at(direction_projected_arrow.global_position - dir, -gravity_direction)
 	
 	apply_central_force(dir * move_speed / 2.0)
 	
 	if is_on_floor():
-		# Ground movement (higher acceleration).
 		apply_central_force(dir * move_speed)
 		
 		if !dir.is_equal_approx(Vector3.ZERO):
@@ -104,28 +114,30 @@ func _physics_process(delta: float) -> void:
 			dir_list.destroy()
 			dir_accum = Vector3.ZERO
 		
-		#print_rich(
-			#"
-			#[color=%s]Shape colliding[/color]
-			#[color=%s]Dirs equals[/color]
-			#[color=%s]Dir passed threshold[/color]
-			#[color=%s]Step shape is colliding[/color]
-			#[color=%s]Step clear is not colliding[/color]
-			#Dir %s
-			#Dir accum normalized %s
-			#Dir accum %s" % [
-			#"green" if floor_step_shape_cast_3d.is_colliding() else "red",
-			#"green" if dir_accum.normalized().dot(dir) > 0.75 else "red",
-			#"green" if dir_accum.length_squared() >= dir_accum_threshold else "red",
-			#"green" if step_shape_cast_3d.is_colliding() else "red",
-			#"green" if !no_obstacle_shape_cast_3d.is_colliding() else "red",
-			#dir,
-			#dir_accum.normalized(),
-			#dir_accum
-		#])
+		if log_movement:
+			print_rich(
+				"
+				[color=%s]Shape colliding[/color]
+				[color=%s]Dirs equals[/color]
+				[color=%s]Dir passed threshold[/color]
+				[color=%s]Step shape is colliding[/color]
+				[color=%s]Step clear is not colliding[/color]
+				Dir %s
+				Dir accum normalized %s
+				Dir accum %s" % [
+				"green" if floor_step_shape_cast_3d.is_colliding() else "red",
+				"green" if dir_accum.normalized().dot(dir) > 0.75 else "red",
+				"green" if dir_accum.length_squared() >= dir_accum_threshold else "red",
+				"green" if step_shape_cast_3d.is_colliding() else "red",
+				"green" if !no_obstacle_shape_cast_3d.is_colliding() else "red",
+				dir,
+				dir_accum.normalized(),
+				dir_accum
+			])
 		
-		floor_step_shape_cast_3d.target_position.x = dir.x * 0.05
-		floor_step_shape_cast_3d.target_position.z = dir.z * 0.05
+		var local_step: Vector3 = floor_step_shape_cast_3d.to_local(floor_step_shape_cast_3d.global_position + dir)
+		floor_step_shape_cast_3d.target_position.x = local_step.x * 0.05
+		floor_step_shape_cast_3d.target_position.z = local_step.z * 0.05
 		
 		if Input.is_action_just_pressed("jump"):
 			linear_velocity = Vector3(linear_velocity.x, 0.0, linear_velocity.y) + gravity_direction * -jump_force
@@ -139,11 +151,17 @@ func _physics_process(delta: float) -> void:
 				no_obstacle_shape_cast_3d.force_shapecast_update()
 				if !no_obstacle_shape_cast_3d.is_colliding():
 					var min_dir_speed: Vector3 = dir * move_speed * 0.3
-					linear_velocity = Vector3(
-						min_dir_speed.x,
-						step_jump_force,
-						min_dir_speed.z
-					)
+					linear_velocity = min_dir_speed + basis.y * step_jump_force
+
+
+func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
+	for i in state.get_contact_count():
+		var body = state.get_contact_collider_object(i)
+		if body is RigidBody3D:
+			body.apply_central_impulse(
+				-state.get_contact_local_normal(i) * 0.5
+			)
+
 
 
 func is_on_floor():

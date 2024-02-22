@@ -23,6 +23,10 @@ func change_level(level_id: String) -> void:
 		HFLog.e("Level with id '%s' has a null or wrong instance scene!" % level_id)
 		return
 	
+	call_deferred("_change_level", level_id)
+
+
+func _change_level(level_id: String) -> void:
 	if current_level != null:
 		if current_level.is_inside_tree():
 			current_level.get_parent().remove_child(current_level)
