@@ -10,3 +10,7 @@ func can_trigger_condition(
 	events_map: Dictionary
 ) -> bool:
 	return true
+
+
+func get_resource_class() -> String:
+	return "HFEventConditional"

@@ -1,0 +1,84 @@
+[gd_scene load_steps=3 format=3 uid="uid://b3my2225ekjju"]
+
+[ext_resource type="Script" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_starting_step_graph_node.gd" id="1_whccf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shtj4"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.0980392, 0.258824, 0.4, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="StartingStepGraphNode" type="GraphNode"]
+offset_right = 91.0
+offset_bottom = 78.0
+mouse_filter = 1
+position_offset = Vector2(274, 234)
+title = "Starting Step"
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 1
+slot/0/right_color = Color(0.298039, 0.615686, 0.396078, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = true
+slot/1/left_type = 0
+slot/1/left_color = Color(0.317647, 0.486275, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+script = ExtResource("1_whccf")
+
+[node name="StartingStepLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Starting node:"
+
+[node name="ConditionalsContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Conditionals" type="Label" parent="ConditionalsContainer"]
+layout_mode = 2
+text = "Conditionals"
+
+[node name="AddConditionalButton" type="Button" parent="ConditionalsContainer"]
+layout_mode = 2
+text = "+"
+
+[node name="DropdownPivot" type="Control" parent="ConditionalsContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ConditionalsListDropdown" type="PanelContainer" parent="ConditionalsContainer/DropdownPivot"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 142.0
+offset_bottom = 56.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_shtj4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ConditionalsContainer/DropdownPivot/ConditionalsListDropdown"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ConditionalsContainer/DropdownPivot/ConditionalsListDropdown/VBoxContainer"]
+layout_mode = 2
+text = "New condition"
+
+[node name="ButtonsOptionsContainer" type="VBoxContainer" parent="ConditionalsContainer/DropdownPivot/ConditionalsListDropdown/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Button" type="Button" parent="ConditionalsContainer/DropdownPivot/ConditionalsListDropdown/VBoxContainer/ButtonsOptionsContainer"]
+layout_mode = 2
+text = "Example Button"
+
+[connection signal="pressed" from="ConditionalsContainer/AddConditionalButton" to="." method="_on_add_conditional_button_pressed"]

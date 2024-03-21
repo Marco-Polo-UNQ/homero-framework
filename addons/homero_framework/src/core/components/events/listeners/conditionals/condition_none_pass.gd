@@ -15,3 +15,7 @@ func can_trigger_condition(
 			!events_map.has(tag) || (events_map.has(tag) && !events_map[tag])
 		)
 	return all_check
+
+
+func get_resource_class() -> String:
+	return "HFConditionNonePass"

@@ -6,30 +6,18 @@ signal event_deactivated()
 signal action_pressed()
 signal action_released()
 
-
 @export_category("Collision Triggers")
-@export var activate_on_enter: bool = true
-
-@export_group("Collision Tags")
-@export var tags_on_activated: PackedStringArray
-@export var tags_on_deactivated: PackedStringArray
-
-@export_group("Collision Types")
-@export var collision_areas: bool = true
-@export var collision_bodies: bool = true
+@export var collision_areas: bool = false
+@export var collision_bodies: bool = false
+@export var collision_events_on_enter: HFEventTriggerGroup
+@export var collision_events_on_exit: HFEventTriggerGroup
 
 @export_category("Interaction Triggers")
-@export var interaction_action: String = ""
-
-@export_group("Interaction Tags")
-@export var activate_tags_on_pressed: PackedStringArray
-@export var deactivate_tags_on_pressed: PackedStringArray
-@export var activate_tags_on_released: PackedStringArray
-@export var deactivate_tags_on_released: PackedStringArray
-
-@export_group("Interaction Types")
+@export var interaction_action: String = "interact"
 @export var interaction_areas: bool = false
 @export var interaction_bodies: bool = false
+@export var interaction_events_on_pressed: HFEventTriggerGroup
+@export var interaction_events_on_released: HFEventTriggerGroup
 
 var colliding_areas: Array[Area3D] = []
 var colliding_bodies: Array[Node3D] = []
@@ -62,13 +50,8 @@ func _on_node_entered(
 		interaction_node_list.push_back(node)
 		set_process_unhandled_input(_eval_can_handle_input())
 	
-	if collision_type:
-		if activate_on_enter:
-			_activate_tags(tags_on_deactivated, false)
-			_activate_tags(tags_on_activated, true)
-		else:
-			_activate_tags(tags_on_activated, false)
-			_activate_tags(tags_on_deactivated, true)
+	if collision_type && collision_events_on_enter != null:
+		collision_events_on_enter.trigger_events()
 
 
 func _on_node_exited(
@@ -82,13 +65,8 @@ func _on_node_exited(
 		interaction_node_list.erase(node)
 		set_process_unhandled_input(_eval_can_handle_input())
 	
-	if collision_type:
-		if !activate_on_enter:
-			_activate_tags(tags_on_deactivated, false)
-			_activate_tags(tags_on_activated, true)
-		else:
-			_activate_tags(tags_on_activated, false)
-			_activate_tags(tags_on_deactivated, true)
+	if collision_type && collision_events_on_exit != null:
+		collision_events_on_exit.trigger_events()
 
 
 func _eval_can_handle_input() -> bool:
@@ -100,17 +78,12 @@ func _eval_can_handle_input() -> bool:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("interact"):
+	if event.is_action_pressed(interaction_action):
 		action_pressed.emit()
-		_activate_tags(activate_tags_on_pressed, true)
-		_activate_tags(deactivate_tags_on_pressed, false)
-	elif event.is_action_released("interact"):
+		if interaction_events_on_pressed != null:
+			interaction_events_on_pressed.trigger_events()
+	elif event.is_action_released(interaction_action):
 		action_released.emit()
-		_activate_tags(activate_tags_on_released, true)
-		_activate_tags(deactivate_tags_on_released, false)
-
-
-func _activate_tags(tag_list: Array, value: bool) -> void:
-	for tag in tag_list:
-		EventsManager.toggle_event(tag, value)
+		if interaction_events_on_released != null:
+			interaction_events_on_released.trigger_events()
 

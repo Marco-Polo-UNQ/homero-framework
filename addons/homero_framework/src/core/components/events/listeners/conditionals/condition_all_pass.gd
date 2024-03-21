@@ -13,3 +13,7 @@ func can_trigger_condition(
 	for tag in event_tags:
 		all_check = all_check && events_map.has(tag) && events_map[tag]
 	return all_check
+
+
+func get_resource_class() -> String:
+	return "HFConditionAllPass"

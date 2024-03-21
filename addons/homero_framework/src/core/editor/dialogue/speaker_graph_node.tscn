@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://j3m0k5pu11p6"]
+
+[ext_resource type="Script" path="res://addons/homero_framework/src/core/editor/dialogue/speaker_graph_node.gd" id="1_2msew"]
+
+[node name="SpeakerGraphNode" type="GraphNode"]
+offset_left = 469.0
+offset_top = 102.0
+offset_right = 574.0
+offset_bottom = 188.0
+mouse_filter = 1
+position_offset = Vector2(469, 102)
+title = "Speaker"
+slot/0/left_enabled = true
+slot/0/left_type = 2
+slot/0/left_color = Color(0.929412, 0.466667, 0.435294, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1_2msew")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Speaker Id"
+
+[node name="SpeakerIdLineEdit" type="LineEdit" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[connection signal="text_changed" from="VBoxContainer/SpeakerIdLineEdit" to="." method="_on_speaker_id_line_edit_text_changed"]

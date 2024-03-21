@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://4sfihvndfk7x"]
 
-[ext_resource type="Script" path="res://addons/homero_framework/src/core/editor/version_checker.gd" id="1_c4bc1"]
+[ext_resource type="Script" path="res://addons/homero_framework/src/core/editor/version/version_checker.gd" id="1_0i4ad"]
 
 [node name="VersionChecker" type="Control"]
 layout_mode = 3
@@ -10,4 +10,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_c4bc1")
+script = ExtResource("1_0i4ad")

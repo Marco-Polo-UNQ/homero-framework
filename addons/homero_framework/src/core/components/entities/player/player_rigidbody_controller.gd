@@ -1,3 +1,4 @@
+class_name ViajantesPlayer3D
 extends RigidBody3D
 
 @export_category("Debug")
@@ -8,7 +9,6 @@ extends RigidBody3D
 @export var move_speed: float
 @export var jump_force: float
 @export var step_jump_force: float
-
 
 @onready var floor_step_shape_cast_3d: ShapeCast3D = $FloorStepShapeCast3D
 @onready var step_shape_cast_3d: ShapeCast3D = $StepShapeCast3D
@@ -30,6 +30,8 @@ var dir_accum_threshold: float = Vector3(3.0, 0.0, 0.0).length_squared()
 
 @onready var gravity_direction: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector"):
 	set = set_gravity
+
+var input_enabled: bool = true
 
 
 func set_gravity(vector: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")) -> void:
@@ -58,7 +60,7 @@ func _physics_process(delta: float) -> void:
 		Input.get_axis("move_left", "move_right"),
 		0.0,
 		Input.get_axis("move_up", "move_down")
-	).normalized()
+	).normalized() * float(input_enabled)
 	
 	var has_input: bool = dir != Vector3.ZERO
 	
@@ -139,7 +141,7 @@ func _physics_process(delta: float) -> void:
 		floor_step_shape_cast_3d.target_position.x = local_step.x * 0.05
 		floor_step_shape_cast_3d.target_position.z = local_step.z * 0.05
 		
-		if Input.is_action_just_pressed("jump"):
+		if Input.is_action_just_pressed("jump") && input_enabled:
 			linear_velocity = Vector3(linear_velocity.x, 0.0, linear_velocity.y) + gravity_direction * -jump_force
 		elif floor_step_shape_cast_3d.is_colliding() && \
 		dir_accum.normalized().dot(dir) > 0.75 && \
@@ -163,7 +165,6 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 			)
 
 
-
 func is_on_floor():
 	return test_move(transform, gravity_direction * 0.01)
 
@@ -173,3 +174,7 @@ func rotate_to_plane(vector: Vector3, normal: Vector3) -> Vector3:
 	rotation_direction *= Quaternion(Vector3.UP, -PI / 2.0)
 	var angle = -Vector3.UP.angle_to(normal)
 	return Quaternion(rotation_direction.normalized(), angle) * vector
+
+
+func toggle_input_enabled(enabled: bool) -> void:
+	input_enabled = enabled

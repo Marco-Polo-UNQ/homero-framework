@@ -5,7 +5,7 @@ const _log_format: String = "Homero Framework - %s"
 
 
 static func d(message: String) -> void:
-	print(_log_format % message)
+	print_rich(("[color=cyan]%s[/color]" % _log_format) % message)
 
 
 static func w(message: String) -> void:

@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnk0e4765allw"]
+
+[ext_resource type="Script" path="res://addons/homero_framework/src/core/editor/version/version_checker_popup.gd" id="1_usdc7"]
+
+[node name="VersionCheckerPopup" type="AcceptDialog"]
+title = "Homero Framework Version Checker"
+position = Vector2i(0, 36)
+size = Vector2i(366, 241)
+visible = true
+script = ExtResource("1_usdc7")
+output_message = "[center][color=cyan]Homero Framework version is different from latest![/color]
+
+Current is [color=red]'%s'[/color] and latest is [color=green]'%s'[/color].
+
+[color=yellow]If you have an outdated version, please update the plugin to receive the latest features![/color][/center]"
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 358.0
+offset_bottom = 192.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MessageLabel" type="RichTextLabel" parent="PanelContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+bbcode_enabled = true
+text = "[center][color=cyan]Homero Framework version is different from latest![/color]
+
+Current is [color=red]'%s'[/color] and latest is [color=green]'%s'[/color].
+
+[color=yellow]If you have an outdated version, please update the plugin to receive the latest features![/color][/center]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 2

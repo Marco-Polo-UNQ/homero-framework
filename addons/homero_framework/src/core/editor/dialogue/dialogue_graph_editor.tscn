@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=3 uid="uid://dqcx1oludr3xh"]
+
+[ext_resource type="Script" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_graph_editor.gd" id="1_e80xw"]
+[ext_resource type="PackedScene" uid="uid://b3my2225ekjju" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_starting_step_graph_node.tscn" id="2_jo8vy"]
+[ext_resource type="PackedScene" uid="uid://cvpng8w7nxjpn" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_conditional_graph_node.tscn" id="3_ds1hu"]
+[ext_resource type="PackedScene" uid="uid://c1b0qtfn8pyl" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_step_graph_node.tscn" id="4_jt3tp"]
+[ext_resource type="PackedScene" uid="uid://j3m0k5pu11p6" path="res://addons/homero_framework/src/core/editor/dialogue/speaker_graph_node.tscn" id="5_d5hy6"]
+
+[node name="DialogueEditor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e80xw")
+
+[node name="ResourcePathLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 98.0
+offset_bottom = 23.0
+text = "lorem ipsum"
+
+[node name="MainGraph" type="GraphEdit" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+right_disconnects = true
+minimap_size = Vector2(120, 80)
+
+[node name="StartingStepNode" parent="MainGraph" instance=ExtResource("2_jo8vy")]
+layout_mode = 0
+offset_left = 274.0
+offset_top = 234.0
+offset_right = 433.0
+offset_bottom = 345.0
+
+[node name="DialogueConditionalGraphNode" parent="MainGraph" instance=ExtResource("3_ds1hu")]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 228.0
+offset_right = 259.0
+offset_bottom = 339.0
+mouse_filter = 1
+position_offset = Vector2(80, 228)
+
+[node name="DialogueStepGraphNode" parent="MainGraph" instance=ExtResource("4_jt3tp")]
+layout_mode = 0
+offset_left = 584.0
+offset_top = 243.0
+offset_right = 701.0
+offset_bottom = 406.0
+
+[node name="SpeakerGraphNode" parent="MainGraph" instance=ExtResource("5_d5hy6")]
+layout_mode = 0
+offset_right = 10905.0
+offset_bottom = 2459.0
+
+[connection signal="connection_request" from="MainGraph" to="." method="_on_main_graph_connection_request"]
+[connection signal="connection_to_empty" from="MainGraph" to="." method="_on_main_graph_connection_to_empty"]
+[connection signal="disconnection_request" from="MainGraph" to="." method="_on_main_graph_disconnection_request"]
+[connection signal="popup_request" from="MainGraph" to="." method="_on_main_graph_popup_request"]
