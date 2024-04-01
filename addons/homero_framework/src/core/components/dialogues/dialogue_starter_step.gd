@@ -1,12 +1,15 @@
 class_name HFDialogueStarterStep
 extends Resource
 
-@export var step_id: StringName
+@export var step_id: int
 @export var enable_conditions: Array[HFEventConditional]
+
+@export_category("Editor Metadata (ignore)")
+@export var graph_position: Vector2
 
 
 func _init(
-	p_step_id: StringName = "",
+	p_step_id: int = 0,
 	p_enable_conditions: Array[HFEventConditional] = []
 ) -> void:
 	step_id = p_step_id

@@ -24,9 +24,7 @@ func _parse_property(
 		var widget: EditorProperty = widget_script.new()
 		add_property_editor(name, widget)
 		widget.edit_called.connect(_on_edit_called)
-		return true
-	else:
-		return false
+	return true
 
 
 func _on_edit_called(dialogue_sequence: HFDialogueSequence) -> void:

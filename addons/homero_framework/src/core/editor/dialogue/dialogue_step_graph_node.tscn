@@ -7,6 +7,7 @@ offset_right = 117.0
 offset_bottom = 108.0
 mouse_filter = 1
 position_offset = Vector2(584, 243)
+resizable = true
 title = "Dialogue Step"
 slot/0/left_enabled = true
 slot/0/left_type = 1
@@ -35,6 +36,24 @@ slot/2/right_type = 2
 slot/2/right_color = Color(0.929412, 0.466667, 0.435294, 1)
 slot/2/right_icon = null
 slot/2/draw_stylebox = true
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color(1, 1, 1, 1)
+slot/3/left_icon = null
+slot/3/right_enabled = true
+slot/3/right_type = 3
+slot/3/right_color = Color(0, 0.588235, 0.941176, 1)
+slot/3/right_icon = null
+slot/3/draw_stylebox = true
+slot/4/left_enabled = false
+slot/4/left_type = 0
+slot/4/left_color = Color(1, 1, 1, 1)
+slot/4/left_icon = null
+slot/4/right_enabled = true
+slot/4/right_type = 4
+slot/4/right_color = Color(0.372549, 0.643137, 0.67451, 1)
+slot/4/right_icon = null
+slot/4/draw_stylebox = true
 script = ExtResource("1_gyssv")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -42,7 +61,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "Step ID"
+text = "Dialogue Key"
 
 [node name="StepIdLineEdit" type="LineEdit" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -56,5 +75,16 @@ horizontal_alignment = 2
 [node name="SpeakerLabel" type="Label" parent="."]
 layout_mode = 2
 text = "Speaker"
+horizontal_alignment = 2
+
+[node name="OptionsLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Options"
+horizontal_alignment = 2
+
+[node name="EventsLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Events"
+horizontal_alignment = 2
 
 [connection signal="text_changed" from="VBoxContainer/StepIdLineEdit" to="." method="_on_step_id_line_edit_text_changed"]

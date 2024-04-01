@@ -3,12 +3,7 @@
 [ext_resource type="Script" path="res://addons/homero_framework/src/core/editor/dialogue/speaker_graph_node.gd" id="1_2msew"]
 
 [node name="SpeakerGraphNode" type="GraphNode"]
-offset_left = 469.0
-offset_top = 102.0
-offset_right = 574.0
-offset_bottom = 188.0
 mouse_filter = 1
-position_offset = Vector2(469, 102)
 title = "Speaker"
 slot/0/left_enabled = true
 slot/0/left_type = 2

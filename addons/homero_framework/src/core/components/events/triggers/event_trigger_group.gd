@@ -4,6 +4,9 @@ extends Resource
 @export var events_enable: PackedStringArray
 @export var events_disable: PackedStringArray
 
+@export_category("Editor Metadata (ignore)")
+@export var graph_position: Vector2
+
 
 func _init(
 	p_events_enable: PackedStringArray = PackedStringArray([]),

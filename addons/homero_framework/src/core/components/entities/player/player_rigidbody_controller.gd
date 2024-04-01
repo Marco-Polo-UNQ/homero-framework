@@ -41,17 +41,17 @@ func set_gravity(vector: Vector3 = ProjectSettings.get_setting("physics/3d/defau
 
 
 func _align_with_y(origin_basis: Basis, new_y: Vector3) -> Basis:
-	print(origin_basis, " ", new_y)
+	HFLog.d("%s %s" % [origin_basis, new_y])
 	var new_basis: Basis = Basis(origin_basis)
 	var cross_prod: Vector3 = -new_basis.z.cross(new_y)
 	if cross_prod.is_equal_approx(Vector3.ZERO):
-		print("Cross product for X is zero, adjusting with Z")
+		HFLog.w("Cross product for X is zero, adjusting with Z")
 		new_basis.z = new_basis.x.cross(new_y)
 	else:
 		new_basis.x = cross_prod
 	new_basis.y = new_y
 	new_basis = new_basis.orthonormalized()
-	print(new_basis)
+	HFLog.d("%s" % new_basis)
 	return new_basis
 
 
@@ -102,22 +102,23 @@ func _physics_process(delta: float) -> void:
 	if direction_projected_arrow.visible:
 		direction_projected_arrow.look_at(direction_projected_arrow.global_position - dir, -gravity_direction)
 	
-	apply_central_force(dir * move_speed / 2.0)
+	apply_central_force(dir * move_speed)
+	
+	if !dir.is_equal_approx(Vector3.ZERO):
+		physics_material_override.friction = 0.0
+		
+		dir_list.push_front(dir)
+		dir_accum += dir
+		if dir_list.length > 10:
+			dir_accum -= dir_list.pop_back()
+	else:
+		physics_material_override.friction = 0.5
+		dir_list.destroy()
+		dir_accum = Vector3.ZERO
 	
 	if is_on_floor():
-		apply_central_force(dir * move_speed)
-		
-		if !dir.is_equal_approx(Vector3.ZERO):
-			dir_list.push_front(dir)
-			dir_accum += dir
-			if dir_list.length > 10:
-				dir_accum -= dir_list.pop_back()
-		else:
-			dir_list.destroy()
-			dir_accum = Vector3.ZERO
-		
 		if log_movement:
-			print_rich(
+			HFLog.d(
 				"
 				[color=%s]Shape colliding[/color]
 				[color=%s]Dirs equals[/color]
@@ -142,7 +143,7 @@ func _physics_process(delta: float) -> void:
 		floor_step_shape_cast_3d.target_position.z = local_step.z * 0.05
 		
 		if Input.is_action_just_pressed("jump") && input_enabled:
-			linear_velocity = Vector3(linear_velocity.x, 0.0, linear_velocity.y) + gravity_direction * -jump_force
+			linear_velocity = Vector3(linear_velocity.x, 0.0, linear_velocity.z) + (gravity_direction * -jump_force)
 		elif floor_step_shape_cast_3d.is_colliding() && \
 		dir_accum.normalized().dot(dir) > 0.75 && \
 		dir_accum.length_squared() >= dir_accum_threshold:
@@ -160,9 +161,11 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	for i in state.get_contact_count():
 		var body = state.get_contact_collider_object(i)
 		if body is RigidBody3D:
-			body.apply_central_impulse(
-				-state.get_contact_local_normal(i) * 0.5
-			)
+			var normal: Vector3 = state.get_contact_local_normal(i)
+			if normal.dot(dir_accum.normalized()) > 0:
+				body.apply_central_impulse(
+					-state.get_contact_local_normal(i) * 0.3
+				)
 
 
 func is_on_floor():

@@ -1,8 +1,8 @@
 class_name HFTriggerArea3D
 extends Area3D
 
-signal event_activated()
-signal event_deactivated()
+signal collision_activated()
+signal collision_deactivated()
 signal action_pressed()
 signal action_released()
 
@@ -52,6 +52,7 @@ func _on_node_entered(
 	
 	if collision_type && collision_events_on_enter != null:
 		collision_events_on_enter.trigger_events()
+		collision_activated.emit()
 
 
 func _on_node_exited(
@@ -67,6 +68,7 @@ func _on_node_exited(
 	
 	if collision_type && collision_events_on_exit != null:
 		collision_events_on_exit.trigger_events()
+		collision_deactivated.emit()
 
 
 func _eval_can_handle_input() -> bool:

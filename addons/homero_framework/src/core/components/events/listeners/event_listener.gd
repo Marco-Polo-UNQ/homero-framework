@@ -15,14 +15,14 @@ func _ready() -> void:
 	for conditional in listener_conditionals:
 		conditional.condition_changed.connect(
 			func ():
-				event_triggered("", true, EventsManager.events_map)
+				event_triggered("", false, EventsManager.events_map)
 		)
 
 
 func add_conditional(new_condition: HFEventConditional) -> void:
 	new_condition.condition_changed.connect(
 		func ():
-			event_triggered("", true, EventsManager.events_map)
+			event_triggered("", false, EventsManager.events_map)
 	)
 	listener_conditionals.push_back(new_condition)
 

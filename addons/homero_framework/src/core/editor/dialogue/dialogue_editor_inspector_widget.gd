@@ -13,6 +13,9 @@ func _init() -> void:
 	add_focusable(property_control)
 	property_control.text = "Edit"
 	property_control.pressed.connect(_on_edit_pressed)
+	label = "Edit Dialogue"
+	read_only = true
+	deletable = false
 
 
 func _on_edit_pressed() -> void:

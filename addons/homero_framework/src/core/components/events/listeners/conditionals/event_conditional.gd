@@ -3,6 +3,9 @@ extends Resource
 
 signal condition_changed
 
+@export_category("Editor Metadata (ignore)")
+@export var graph_position: Vector2
+
 
 func can_trigger_condition(
 	event_tag: String,
@@ -10,7 +13,3 @@ func can_trigger_condition(
 	events_map: Dictionary
 ) -> bool:
 	return true
-
-
-func get_resource_class() -> String:
-	return "HFEventConditional"
