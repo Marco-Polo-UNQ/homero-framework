@@ -23,9 +23,9 @@ signal step_advanced(next_step_id: int)
 
 
 func _init(
-	p_unique_id: int = 0,
+	p_unique_id: int = -1,
 	p_dialogue_key: StringName = "",
-	p_next_step_id: int = 0,
+	p_next_step_id: int = -1,
 	p_options: Array[HFDialogueOption] = []
 ) -> void:
 	unique_id = p_unique_id
