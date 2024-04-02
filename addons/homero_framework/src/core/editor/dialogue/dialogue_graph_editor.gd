@@ -274,9 +274,9 @@ func _on_main_graph_delete_nodes_request(nodes: Array[StringName]) -> void:
 					connection.to_node,
 					connection.to_port
 				)
-			elif connection.to_node == node_name:
+			if connection.to_node == node_name:
 				main_graph.disconnect_node(
-					connection.to_node,
+					connection.from_node,
 					connection.from_port,
 					node_name,
 					connection.to_port
