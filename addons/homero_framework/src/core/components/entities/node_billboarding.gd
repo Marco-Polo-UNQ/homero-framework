@@ -11,7 +11,6 @@ func _process(delta: float) -> void:
 		_mimic_camera()
 	else:
 		_look_at_on_y()
-	
 
 
 func _mimic_camera() -> void:
@@ -23,6 +22,10 @@ func _mimic_camera() -> void:
 
 
 func _look_at_on_y() -> void:
-	var target_look: Vector3 = camera.basis.z
-	rotation.y = atan2(target_look.x, target_look.z)
-
+	var current_y: Vector3 = global_basis.y
+	look_at(
+		global_position + camera.basis.z,
+		global_basis.y,
+		true
+	)
+	global_basis.y = current_y
