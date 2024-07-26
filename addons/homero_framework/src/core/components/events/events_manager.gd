@@ -9,3 +9,7 @@ func toggle_event(tag: String, value: bool) -> void:
 	HFLog.d("Event toggled %s %s" % [tag, value])
 	events_map[tag] = value
 	event_changed.emit(tag, value, events_map)
+
+
+func reset_events() -> void:
+	events_map.clear()
