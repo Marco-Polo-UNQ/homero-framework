@@ -33,9 +33,13 @@ func setup(p_dialogue_sequence: HFDialogueSequence) -> void:
 	resource_path_label.text = "Editing %s" % dialogue_sequence.resource_path
 	
 	main_graph.clear_connections()
+	
 	for node: Node in main_graph.get_children():
-		main_graph.remove_child(node)
-		node.queue_free()
+		## GraphEdit.get_children() also returns its connection layer
+		## Deleting the layer crashes the editor
+		if node.name != "_connection_layer":
+			main_graph.call_deferred("remove_child", node)
+			node.call_deferred("queue_free")
 	
 	var starting_steps: Array[HFDiagEditStartingStepNode] = []
 	var dialogue_steps: Array[HFDiagEditDialogueStepNode] = []
