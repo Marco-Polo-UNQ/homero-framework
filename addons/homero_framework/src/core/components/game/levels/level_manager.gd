@@ -3,6 +3,7 @@ extends Node
 ## Generic level manager implementation
 
 signal change_level_called(level_id: StringName)
+signal level_loaded()
 
 @export var levels: Array[HFLevelData]
 
@@ -40,5 +41,7 @@ func _change_level(level_id: StringName) -> void:
 	current_level = levels_map[level_id].level_instance_scene.instantiate()
 	current_level.change_level.connect(change_level)
 	add_child(current_level)
+	
+	level_loaded.emit()
 	
 	current_level_id = level_id

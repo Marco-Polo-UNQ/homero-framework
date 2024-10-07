@@ -32,6 +32,9 @@ func event_triggered(
 	value: bool,
 	events_map: Dictionary
 ) -> void:
+	if listener_conditionals.is_empty():
+		return
+	
 	var all_check: bool = true
 	
 	for conditional in listener_conditionals:
