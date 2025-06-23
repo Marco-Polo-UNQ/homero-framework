@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b3my2225ekjju"]
 
-[ext_resource type="Script" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_starting_step_graph_node.gd" id="1_whccf"]
+[ext_resource type="Script" uid="uid://bk2gs5ku8p5qr" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_starting_step_graph_node.gd" id="1_whccf"]
 
 [node name="StartingStepGraphNode" type="GraphNode"]
 offset_right = 91.0

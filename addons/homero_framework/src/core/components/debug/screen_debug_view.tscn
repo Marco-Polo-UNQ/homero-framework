@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ekvbgkngyo52"]
 
-[ext_resource type="Script" path="res://addons/homero_framework/src/core/components/debug/screen_debug_view.gd" id="1_1buk2"]
+[ext_resource type="Script" uid="uid://bx4gb21xj5478" path="res://addons/homero_framework/src/core/components/debug/screen_debug_view.gd" id="1_1buk2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_61taj"]
 outline_size = 2

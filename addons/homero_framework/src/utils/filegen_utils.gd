@@ -11,4 +11,3 @@ static func check_class_file_exists_or_create(
 		if !FileAccess.file_exists(file_path):
 			var file = FileAccess.open(file_path, FileAccess.WRITE)
 			file.store_line(content)
-

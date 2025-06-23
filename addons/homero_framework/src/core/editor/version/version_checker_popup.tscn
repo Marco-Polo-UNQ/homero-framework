@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bnk0e4765allw"]
 
-[ext_resource type="Script" path="res://addons/homero_framework/src/core/editor/version/version_checker_popup.gd" id="1_usdc7"]
+[ext_resource type="Script" uid="uid://6wgw2ods7xuo" path="res://addons/homero_framework/src/core/editor/version/version_checker_popup.gd" id="1_usdc7"]
 
 [node name="VersionCheckerPopup" type="AcceptDialog"]
 title = "Homero Framework Version Checker"

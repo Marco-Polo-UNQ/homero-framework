@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://dqcx1oludr3xh"]
 
-[ext_resource type="Script" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_graph_editor.gd" id="1_e80xw"]
+[ext_resource type="Script" uid="uid://bsneyw4pyb2ad" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_graph_editor.gd" id="1_e80xw"]
 [ext_resource type="PackedScene" uid="uid://b3my2225ekjju" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_starting_step_graph_node.tscn" id="2_jo8vy"]
 [ext_resource type="PackedScene" uid="uid://cvpng8w7nxjpn" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_conditional_graph_node.tscn" id="3_ds1hu"]
 [ext_resource type="PackedScene" uid="uid://c1b0qtfn8pyl" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_step_graph_node.tscn" id="4_jt3tp"]

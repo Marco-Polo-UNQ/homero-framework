@@ -88,4 +88,3 @@ func _unhandled_input(event: InputEvent) -> void:
 		action_released.emit()
 		if interaction_events_on_released != null:
 			interaction_events_on_released.trigger_events()
-
