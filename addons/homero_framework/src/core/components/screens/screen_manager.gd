@@ -26,29 +26,13 @@ var _current_screen: HFScreenLoader = null
 func _ready() -> void:
 	## Checks if the code is evaluated on the Editor or at runtime.
 	if Engine.is_editor_hint():
-		## On the editor, checks if the [HFScreenConstants] utility class
-		## exists somewhere, and if not, creates a new file with the
-		## aforementioned path and placeholder code.
-		HFFilegenUtils.check_class_file_exists_or_create(
+		# On the editor, checks if the [HFScreenConstants] utility class
+		# exists somewhere, and if not, creates a new file with the
+		# aforementioned path and placeholder code.
+		_check_class_file_exists_or_create(
 			"HFScreenLoaderConstants",
 			"res://screens_constants.gd",
-			(
-				"class_name HFScreenConstants\n" +\
-				"extends Object\n\n" +\
-				"## Custom screen constants class to be used with [HFScreenManager] and [HFScreenLoader]\n\n" +\
-				"## Custom enum used for static references to [HFScreenLoader], to be used with [member HFScreenLoader.screen_id].\n" +\
-				"## Usage:\n" +\
-				"## [codeblock]\n" +\
-				"## enum SCREENS {\n" +\
-				"##     LOADING,\n" +\
-				"##     SCREEN1,\n" +\
-				"##     SCREEN2\n" +\
-				"##     }\n" +\
-				"## [/codeblock]\n" +\
-				"enum SCREENS {\n" +\
-				"	DEFAULT\n" +\
-				"}"
-			)
+			_get_default_screen_constants_content()
 		)
 	else:
 		## At runtime, initializes the private map of loaded screens and
@@ -84,3 +68,35 @@ func _change_screen(screen_id: int, value = null) -> void:
 	## Then initialize it and emit a signal
 	_current_screen.enter(value)
 	screen_changed.emit(screen_id)
+
+
+# Utils function that checks the existence of a user-defined class, and if it doesn't exist
+# it creates a new file in a path with a determined content.
+func _check_class_file_exists_or_create(
+		class_p: String,
+		file_path: String,
+		content: String = _get_default_screen_constants_content()
+	) -> void:
+		if !ClassDB.class_exists(class_p):
+			if !FileAccess.file_exists(file_path):
+				var file = FileAccess.open(file_path, FileAccess.WRITE)
+				file.store_line(content)
+
+
+# Returns the default content of the script containing the HFScreenConstants data
+func _get_default_screen_constants_content() -> String:
+	return "class_name HFScreenConstants\n" +\
+				"extends Object\n\n" +\
+				"## Custom screen constants class to be used with [HFScreenManager] and [HFScreenLoader]\n\n" +\
+				"## Custom enum used for static references to [HFScreenLoader], to be used with [member HFScreenLoader.screen_id].\n" +\
+				"## Usage:\n" +\
+				"## [codeblock]\n" +\
+				"## enum SCREENS {\n" +\
+				"##     LOADING,\n" +\
+				"##     SCREEN1,\n" +\
+				"##     SCREEN2\n" +\
+				"##     }\n" +\
+				"## [/codeblock]\n" +\
+				"enum SCREENS {\n" +\
+				"	DEFAULT\n" +\
+				"}"
