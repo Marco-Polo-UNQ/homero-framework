@@ -11,8 +11,12 @@ config_version=5
 [application]
 
 config/name="Homero-framework"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+EventsManager="*res://addons/homero_framework/src/core/components/events/events_manager.gd"
 
 [editor_plugins]
 
