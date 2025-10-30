@@ -82,7 +82,7 @@ class ScriptCoverage:
 		var pass_fail := ""
 
 		if target != INF:
-			pass_fail = "(fail) " if coverage_percent < target else "(pass) "
+			pass_fail = "[color=red](fail)[/color] " if coverage_percent < target else "[color=green](pass)[/color] "
 		result.append("%s%.1f%% %s" % [pass_fail, coverage_percent, script_path])
 		if show_source:
 			for line in source_code.split("\n"):
@@ -459,7 +459,7 @@ func _finalize(print_verbosity := 0):
 		coverage_collectors[script_path].revert()
 	if _enforce_node_coverage:
 		_scene_tree.disconnect("tree_changed", Callable(self, "_on_tree_changed"))
-	print(script_coverage(print_verbosity))
+	print_rich(script_coverage(print_verbosity))
 
 
 func get_coverage_collector(script_name: String):
@@ -514,7 +514,7 @@ func script_coverage(verbosity := 0):
 	var coverage_percent := coverage_percent()
 	var pass_fail := ""
 	if _coverage_target_total != INF:
-		pass_fail = "(fail) " if coverage_percent < _coverage_target_total else "(pass) "
+		pass_fail = "[color=red](fail)[/color] " if coverage_percent < _coverage_target_total else "[color=green](pass)[/color] "
 	var multiline := false
 	if verbosity > Verbosity.NONE:
 		for script in coverage_collectors:

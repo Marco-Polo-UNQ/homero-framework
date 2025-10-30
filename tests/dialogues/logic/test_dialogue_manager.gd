@@ -20,6 +20,9 @@ class DisplayMockContent:
 	
 	func set_dialogue_manager(_value: HFDialogueManager) -> void:
 		pass
+	
+	func notify_exit() -> void:
+		pass
 
 
 func before_each() -> void:
@@ -127,3 +130,57 @@ func test_dialogue_manager_cannot_activate_dialogue_if_dialogue_is_already_activ
 	assert_true(dialogue_sequence_stub.active)
 	assert_push_warning_count(1, "There was a warning raised about an already active dialogue")
 	assert_called_count(dialogue_sequence_stub.start_sequence, 1)
+
+
+func test_dialogue_manager_refreshes_dialogue_display_instance_on_secondary_activate_dialogue_if_dialogue_was_inactive() -> void:
+	assert_false(dialogue_sequence_stub.active)
+	stub(dialogue_sequence_stub.start_sequence).to_call(
+		func():
+			dialogue_sequence_stub.active = false
+	)
+	dialogue_manager.activate_dialogue()
+	assert_false(dialogue_sequence_stub.active)
+	
+	var dialogue_display_instance: Node = dialogue_manager._dialogue_display_instance
+	
+	dialogue_manager.activate_dialogue()
+	assert_false(dialogue_sequence_stub.active)
+	assert_true(dialogue_display_instance.is_queued_for_deletion())
+	
+	assert_called_count(dialogue_sequence_stub.start_sequence, 2)
+	assert_push_warning_count(0, "No warning raised via push_warning")
+
+
+func test_dialogue_manager_can_handle_dialogue_started_signal_from_dialogue_sequence() -> void:
+	watch_signals(dialogue_manager)
+	dialogue_sequence_stub.dialogue_started.emit()
+	assert_signal_emitted(dialogue_manager.sequence_activated)
+
+
+func test_dialogue_manager_can_handle_dialogue_ended_signal_from_dialogue_sequence() -> void:
+	watch_signals(dialogue_manager)
+	dialogue_sequence_stub.dialogue_ended.emit()
+	assert_signal_emitted(dialogue_manager.sequence_deactivated)
+
+
+func test_dialogue_manager_removes_dialogue_display_after_dialogue_ended_signal_from_dialogue_sequence() -> void:
+	var dialogue_display_stub_empty: Node = double(DisplayMockEmpty, DOUBLE_STRATEGY.INCLUDE_NATIVE).new()
+	autoqfree(dialogue_display_stub_empty)
+	dialogue_display_scene_stub.pack(dialogue_display_stub_empty)
+	dialogue_manager.activate_dialogue()
+	watch_signals(dialogue_manager)
+	dialogue_sequence_stub.dialogue_ended.emit()
+	assert_signal_emitted(dialogue_manager.sequence_deactivated)
+	assert_null(dialogue_manager._dialogue_display_instance)
+	assert_eq(dialogue_manager.get_child_count(), 0)
+
+
+func test_dialogue_manager_removes_dialogue_display_calls_notify_exit_after_dialogue_ended_signal_from_dialogue_sequence() -> void:
+	dialogue_manager.activate_dialogue()
+	watch_signals(dialogue_manager)
+	var dialogue_display_instance: Node = dialogue_manager._dialogue_display_instance
+	dialogue_sequence_stub.dialogue_ended.emit()
+	assert_signal_emitted(dialogue_manager.sequence_deactivated)
+	assert_not_null(dialogue_manager._dialogue_display_instance)
+	assert_eq(dialogue_manager.get_child_count(), 1)
+	assert_called_count(dialogue_display_instance.notify_exit, 1)

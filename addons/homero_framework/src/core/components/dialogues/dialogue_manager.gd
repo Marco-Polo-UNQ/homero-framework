@@ -65,3 +65,4 @@ func _remove_dialogue_display_instance(instantaneous: bool = true) -> void:
 			if get_children().has(_dialogue_display_instance):
 				remove_child(_dialogue_display_instance)
 			_dialogue_display_instance.queue_free()
+			_dialogue_display_instance = null
