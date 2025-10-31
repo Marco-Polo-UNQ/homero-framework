@@ -1,7 +1,7 @@
 extends GutHookScript
 
-const COVERAGE_TARGET := 75.0
-const FILE_TARGET := 33.0
+const COVERAGE_TARGET: float = 90.0
+const FILE_TARGET: float = 90.0
 
 func run():
 	var coverage: Coverage = Coverage.instance
