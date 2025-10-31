@@ -29,9 +29,9 @@ func before_each() -> void:
 	dialogue_manager = HFDialogueManager.new()
 	
 	dialogue_sequence_stub = double(HFDialogueSequence).new(
-		false,
 		[] as Array[HFDialogueStarterStep],
-		[] as Array[HFDialogueStep]
+		[] as Array[HFDialogueStep],
+		false
 	)
 	
 	stub(dialogue_sequence_stub.start_sequence).to_call(
