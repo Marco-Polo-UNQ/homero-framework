@@ -14,21 +14,21 @@ func before_each() -> void:
 	)
 
 
-func test_dialogue_sequence_exists() -> void:
+func test_dialogue_speaker_exists() -> void:
 	assert_not_null(
 		dialogue_speaker,
 		"Dialogue Speaker should instantiate and not be null"
 	)
 
 
-func test_dialogue_sequence_has_starting_steps() -> void:
+func test_dialogue_speaker_has_starting_steps() -> void:
 	assert_eq(
 		dialogue_speaker.speaker_data,
 		speaker_data_stub
 	)
 
 
-func test_dialogue_sequence_has_dialogue_steps() -> void:
+func test_dialogue_speaker_has_dialogue_steps() -> void:
 	assert_eq(
 		dialogue_speaker.graph_position,
 		Vector2.ZERO
