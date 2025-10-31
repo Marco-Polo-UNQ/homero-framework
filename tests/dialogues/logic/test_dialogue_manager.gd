@@ -58,10 +58,6 @@ func before_each() -> void:
 	add_child_autoqfree(dialogue_manager)
 
 
-#func after_each() -> void:
-	#dialogue_manager = null
-
-
 func test_dialogue_manager_exists() -> void:
 	assert_not_null(
 		dialogue_manager,
