@@ -5,7 +5,7 @@ extends Resource
 ## The actual editable speaker data resource for this speaker.
 @export var speaker_data: HFDialogueSpeakerResource
 
-# Dialogue editor graph position metadata, not visible in editor inspector.
+## Dialogue editor graph position metadata, not visible in editor inspector.
 @export_storage var graph_position: Vector2
 
 

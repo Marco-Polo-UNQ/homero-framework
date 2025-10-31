@@ -12,7 +12,7 @@ signal option_selected(dialogue_key: StringName, next_step_id: int)
 @export_category("Dialogue Option Info")
 ## The dialogue key for this dialogue option.
 @export var dialogue_key: StringName
-## The id of the next [class HFDialogueStep] internal id to go to if this
+## The internal id of the next [HFDialogueStep] to go to if this
 ## option is selected.
 @export var next_step_id: int
 ## Conditions that must be met for this option to be enabled.
@@ -22,7 +22,7 @@ signal option_selected(dialogue_key: StringName, next_step_id: int)
 ## Events triggered when this option is selected.
 @export var option_events: HFEventTriggerGroup
 
-# Dialogue Editor graph position metadata, not visible in the inspector.
+## Dialogue Editor graph position metadata, not visible in the inspector.
 @export_storage var graph_position: Vector2
 
 # Resource constructor.
