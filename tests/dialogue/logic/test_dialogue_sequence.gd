@@ -16,7 +16,10 @@ func before_each() -> void:
 		0,
 		&"",
 		1,
-		[] as Array[HFDialogueOption]
+		null,
+		[] as Array[HFDialogueOption],
+		null,
+		Vector2.ZERO
 	)
 	
 	dialogue_sequence = HFDialogueSequence.new(
@@ -84,7 +87,10 @@ func test_dialogue_sequence_can_change_current_step_to_next_step_from_handling_s
 		1,
 		&"",
 		-1,
-		[] as Array[HFDialogueOption]
+		null,
+		[] as Array[HFDialogueOption],
+		null,
+		Vector2.ZERO
 	)
 	
 	dialogue_sequence.dialogue_steps.push_back(another_dialogue_step_stub)
