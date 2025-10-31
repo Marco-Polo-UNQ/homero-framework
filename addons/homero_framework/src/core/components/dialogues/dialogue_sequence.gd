@@ -1,57 +1,72 @@
 class_name HFDialogueSequence
 extends Resource
+## Dialogue sequence resource for managing dialogue steps and flow.
+##
+## Handles the logic for starting, advancing, and ending dialogue sequences.
+## It serves as a pure logical representation of a dialogue, with no integrated
+## UI representation, exposing an easy to use API for flow navigation.
 
+## Emitted when the dialogue sequence starts.
 signal dialogue_started()
+## Emitted when the dialogue sequence ends.
 signal dialogue_ended()
+## Emitted when the current step changes.[br]
+## [param new_step] The step of the dialogue.
 signal step_changed(new_step: HFDialogueStep)
 
-@export var edit_dialogue: bool = false
-
 @export_category("Dialogue Steps")
+## The possible starting steps for the dialogue sequence.
 @export var starting_steps: Array[HFDialogueStarterStep]
-@export var dialogue_steps: Array[HFDialogueStep] :
-	set(steps):
-		dialogue_steps = steps
-		dialogues_map = {}
-		for step: HFDialogueStep in dialogue_steps:
-			dialogues_map[step.unique_id] = step
+## The steps in the entire dialogue flowchart.
+@export var dialogue_steps: Array[HFDialogueStep]
 
-var dialogues_map: Dictionary
+# Placeholder variable used by the widget plugin to inject a custom edit button.
+# It doesn't do anything by itself.
+@export var _edit_dialogue: bool = false
 
+## True if the sequence is currently active.
 var active: bool = false
 
+## The current step in the sequence.
 var current_step: HFDialogueStep
 
+# Cache map of step unique_id to step instance.
+var _dialogues_map: Dictionary[int, HFDialogueStep]
 
+# Resource constructor.
 func _init(
-	p_edit_dialogue: bool = false,
 	p_starting_steps: Array[HFDialogueStarterStep] = [],
-	p_dialogue_steps: Array[HFDialogueStep] = []
+	p_dialogue_steps: Array[HFDialogueStep] = [],
+	p_edit_dialogue: bool = false
 ) -> void:
-	edit_dialogue = false
+	_edit_dialogue = false #Always false
 	starting_steps = p_starting_steps
 	dialogue_steps = p_dialogue_steps
-	dialogues_map = {}
-	for step: HFDialogueStep in dialogue_steps:
-		dialogues_map[step.unique_id] = step
 
-
+## Starts the dialogue sequence, activating the first valid starting step.[br]
+## If there is a valid [HFDialogueStarterStep] in [member starting_steps]
+## pointing to an existing valid [HFDialogueStep] in [member dialogue_steps]
+## it sets the step as current, sets [member active] to true and emits
+## [signal dialogue_started].[br]
+## Otherwise, [member active] is set to false and emits [signal dialogue_ended].
 func start_sequence() -> void:
+	# We first reset all values and build the _dialogues_map cache for O(1) access.
 	current_step = null
-	dialogues_map = {}
+	_dialogues_map = {}
 	for step: HFDialogueStep in dialogue_steps:
-		dialogues_map[step.unique_id] = step
+		_dialogues_map[step.unique_id] = step
 	
 	for starting_step: HFDialogueStarterStep in starting_steps:
+		var is_enabled: bool = starting_step.is_enabled()
 		HFLog.d(
 			"Testing step '%s' with is_enabled: '%s' with steps %s with map %s" % [
 				starting_step.step_id,
-				starting_step.is_enabled(),
+				is_enabled,
 				dialogue_steps,
-				dialogues_map
+				_dialogues_map
 			]
 		)
-		if starting_step.is_enabled() && dialogues_map.has(starting_step.step_id):
+		if is_enabled && _dialogues_map.has(starting_step.step_id):
 			HFLog.d("Dialogue sequence has a valid starting step, activating")
 			_on_dialogue_started()
 			_set_step_as_current(starting_step.step_id)
@@ -60,19 +75,19 @@ func start_sequence() -> void:
 	HFLog.d("Dialogue sequence found no starting step, doing nothing")
 	_on_dialogue_ended()
 
-
+## Advances the current step if has no available options.
 func advance_step() -> void:
 	if current_step.options.is_empty():
 		current_step.advance_step()
 
-
+# Sets the step with the given id as the current step.
 func _set_step_as_current(next_step_id: int) -> void:
 	HFLog.d("Handling advance step for step '%s'" % next_step_id)
 	if current_step != null:
 		if current_step.step_advanced.is_connected(_set_step_as_current):
 			current_step.step_advanced.disconnect(_set_step_as_current)
 	
-	var next_step: HFDialogueStep = dialogues_map[next_step_id] if dialogues_map.has(next_step_id) else null
+	var next_step: HFDialogueStep = _dialogues_map[next_step_id] if _dialogues_map.has(next_step_id) else null
 	
 	if next_step == null:
 		HFLog.d("Step empty or doesn't exist, ending dialogue")
@@ -84,12 +99,12 @@ func _set_step_as_current(next_step_id: int) -> void:
 		current_step.on_step_is_current()
 		step_changed.emit(current_step)
 
-
+# Called when the dialogue sequence starts.
 func _on_dialogue_started() -> void:
 	active = true
 	dialogue_started.emit()
 
-
+# Called when the dialogue sequence ends.
 func _on_dialogue_ended() -> void:
 	active = false
 	dialogue_ended.emit()
