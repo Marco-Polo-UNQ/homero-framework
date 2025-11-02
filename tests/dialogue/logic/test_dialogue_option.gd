@@ -8,7 +8,11 @@ var event_trigger_group_stub: HFEventTriggerGroup
 
 func before_each() -> void:
 	event_conditional_stub = double(HFEventConditional).new()
-	event_trigger_group_stub = double(HFEventTriggerGroup).new(PackedStringArray([]), PackedStringArray([]))
+	event_trigger_group_stub = double(HFEventTriggerGroup).new(
+		PackedStringArray([]),
+		PackedStringArray([]),
+		Vector2.ZERO
+	)
 	
 	dialogue_option = HFDialogueOption.new(
 		"test",
@@ -68,21 +72,21 @@ func test_dialogue_option_is_enabled_returns_true_if_enable_conditions_is_empty(
 
 
 func test_dialogue_option_is_enabled_returns_true_if_all_enable_conditions_are_enabled() -> void:
-	stub(event_conditional_stub.can_trigger_condition.bind("", true, EventsManager.events_map)).to_return(true)
+	stub(event_conditional_stub.can_trigger_condition.bind(&"", false, EventsManager.events_map)).to_return(true)
 	assert_true(dialogue_option.is_enabled())
 	
 	var another_condition_stub: HFEventConditional = double(HFEventConditional).new()
-	stub(another_condition_stub.can_trigger_condition.bind("", true, EventsManager.events_map)).to_return(true)
+	stub(another_condition_stub.can_trigger_condition.bind(&"", false, EventsManager.events_map)).to_return(true)
 	dialogue_option.enable_conditions.push_back(another_condition_stub)
 	assert_true(dialogue_option.is_enabled())
 
 
 func test_dialogue_option_is_enabled_returns_false_if_any_enable_conditions_are_not_enabled() -> void:
-	stub(event_conditional_stub.can_trigger_condition.bind("", true, EventsManager.events_map)).to_return(true)
+	stub(event_conditional_stub.can_trigger_condition.bind(&"", false, EventsManager.events_map)).to_return(true)
 	assert_true(dialogue_option.is_enabled())
 	
 	var another_condition_stub: HFEventConditional = double(HFEventConditional).new()
-	stub(another_condition_stub.can_trigger_condition.bind("", true, EventsManager.events_map)).to_return(false)
+	stub(another_condition_stub.can_trigger_condition.bind(&"", false, EventsManager.events_map)).to_return(false)
 	dialogue_option.enable_conditions.push_back(another_condition_stub)
 	assert_false(dialogue_option.is_enabled())
 

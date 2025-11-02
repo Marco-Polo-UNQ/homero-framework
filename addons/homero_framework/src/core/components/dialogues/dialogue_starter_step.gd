@@ -11,7 +11,7 @@ extends Resource
 ## Conditions that must be met for this starting sequence to be enabled.
 @export var enable_conditions: Array[HFEventConditional]
 
-# Editor graph position metadata.
+## Dialogue editor graph position metadata, not visible in editor inspector.
 @export_storage var graph_position: Vector2
 
 ## Initializes the dialogue starter step with parameters.
@@ -30,6 +30,6 @@ func is_enabled() -> bool:
 	var is_enabled: bool = true
 	for condition in enable_conditions:
 		is_enabled = is_enabled && condition.can_trigger_condition(
-			"", true, EventsManager.events_map
+			&"", false, EventsManager.events_map
 		)
 	return is_enabled

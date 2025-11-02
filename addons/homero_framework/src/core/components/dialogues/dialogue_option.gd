@@ -44,7 +44,7 @@ func is_enabled() -> bool:
 	var is_enabled: bool = true
 	for condition in enable_conditions:
 		is_enabled = is_enabled && condition.can_trigger_condition(
-			"", true, EventsManager.events_map
+			&"", false, EventsManager.events_map
 		)
 	return is_enabled
 

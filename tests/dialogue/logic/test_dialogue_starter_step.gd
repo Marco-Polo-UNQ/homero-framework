@@ -49,20 +49,20 @@ func test_dialogue_starter_step_is_enabled_returns_true_if_enable_conditions_is_
 
 
 func test_dialogue_starter_step_is_enabled_returns_true_if_all_enable_conditions_are_enabled() -> void:
-	stub(event_conditional_stub.can_trigger_condition.bind("", true, EventsManager.events_map)).to_return(true)
+	stub(event_conditional_stub.can_trigger_condition.bind(&"", false, EventsManager.events_map)).to_return(true)
 	assert_true(dialogue_starter_step.is_enabled())
 	
 	var another_condition_stub: HFEventConditional = double(HFEventConditional).new()
-	stub(another_condition_stub.can_trigger_condition.bind("", true, EventsManager.events_map)).to_return(true)
+	stub(another_condition_stub.can_trigger_condition.bind(&"", false, EventsManager.events_map)).to_return(true)
 	dialogue_starter_step.enable_conditions.push_back(another_condition_stub)
 	assert_true(dialogue_starter_step.is_enabled())
 
 
 func test_dialogue_starter_step_is_enabled_returns_false_if_any_enable_conditions_are_not_enabled() -> void:
-	stub(event_conditional_stub.can_trigger_condition.bind("", true, EventsManager.events_map)).to_return(true)
+	stub(event_conditional_stub.can_trigger_condition.bind(&"", false, EventsManager.events_map)).to_return(true)
 	assert_true(dialogue_starter_step.is_enabled())
 	
 	var another_condition_stub: HFEventConditional = double(HFEventConditional).new()
-	stub(another_condition_stub.can_trigger_condition.bind("", true, EventsManager.events_map)).to_return(false)
+	stub(another_condition_stub.can_trigger_condition.bind(&"", false, EventsManager.events_map)).to_return(false)
 	dialogue_starter_step.enable_conditions.push_back(another_condition_stub)
 	assert_false(dialogue_starter_step.is_enabled())
