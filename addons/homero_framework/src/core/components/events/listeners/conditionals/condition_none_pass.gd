@@ -1,13 +1,23 @@
 class_name HFConditionNonePass
 extends HFEventConditional
+## Condition that checks that none of the specified event tags have passed (are true).
 
+## Event Tags to check against.
 @export var event_tags: PackedStringArray
 
 
+func _init(
+	p_event_tags: PackedStringArray = PackedStringArray([]),
+	p_graph_position: Vector2 = Vector2.ZERO
+) -> void:
+	super(p_graph_position)
+	event_tags = p_event_tags
+
+
 func can_trigger_condition(
-	event_tag: String,
+	event_tag: StringName,
 	value: bool,
-	events_map: Dictionary
+	events_map: Dictionary[StringName, bool]
 ) -> bool:
 	var all_check: bool = true
 	for tag in event_tags:
@@ -15,7 +25,3 @@ func can_trigger_condition(
 			!events_map.has(tag) || (events_map.has(tag) && !events_map[tag])
 		)
 	return all_check
-
-
-func get_resource_class() -> String:
-	return "HFConditionNonePass"
