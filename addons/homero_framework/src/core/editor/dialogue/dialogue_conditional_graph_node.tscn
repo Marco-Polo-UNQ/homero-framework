@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cvpng8w7nxjpn"]
 
-[ext_resource type="Script" uid="uid://bmpol77ehjtdy" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_conditional_graph_node.gd" id="1_4rray"]
+[ext_resource type="Script" uid="uid://wl2fajnuivv3" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_conditional_graph_node.gd" id="1_4rray"]
 
 [node name="DialogueConditionalGraphNode" type="GraphNode"]
 offset_right = 9.0
