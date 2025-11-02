@@ -5,13 +5,15 @@ class TestArea2D:
 	
 	var tests_handler: CommonTestsHandler
 	
-	func before_each() -> void:
+	func before_all() -> void:
 		tests_handler = CommonTestsHandler.new(
 			self,
 			Vector2.ZERO,
 			Vector2.ONE * 1000.0,
 			RectangleShape2D.new()
 		)
+	
+	func before_each() -> void:
 		tests_handler.before_each_handler(
 			HFTriggerArea2D.new(),
 			StaticBody2D.new(),
@@ -20,9 +22,6 @@ class TestArea2D:
 			CollisionShape2D.new(),
 			CollisionShape2D.new()
 		)
-	
-	func after_each() -> void:
-		tests_handler.after_each_handler()
 	
 	#region tests
 	
@@ -91,13 +90,15 @@ class TestArea3D:
 	
 	var tests_handler: CommonTestsHandler
 	
-	func before_each() -> void:
+	func before_all() -> void:
 		tests_handler = CommonTestsHandler.new(
 			self,
 			Vector3.ZERO,
 			Vector3.ONE * 1000.0,
 			BoxShape3D.new()
 		)
+	
+	func before_each() -> void:
 		tests_handler.before_each_handler(
 			HFTriggerArea3D.new(),
 			StaticBody3D.new(),
@@ -106,9 +107,6 @@ class TestArea3D:
 			CollisionShape3D.new(),
 			CollisionShape3D.new()
 		)
-	
-	func after_each() -> void:
-		tests_handler.after_each_handler()
 	
 	#region tests
 	
@@ -256,18 +254,12 @@ class CommonTestsHandler:
 		_configure_collision_node(test_other_area, other_area_collision_shape)
 
 
-	func after_each_handler() -> void:
-		for node in [trigger_area, test_other_body, test_other_area]:
-			test.remove_child(node)
-			node.free()
-
-
 	func _configure_collision_node(
 		node: Node,
 		collision_shape: Node,
 		starting_position = base_position_test
 	) -> void:
-		test.add_child(node)
+		test.add_child_autoqfree(node)
 		node.global_position = starting_position
 		collision_shape.shape = collision_shape_shape
 		node.add_child(collision_shape)
