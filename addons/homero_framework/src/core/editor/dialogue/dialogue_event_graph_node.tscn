@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://n5eojx7b6rph"]
 
-[ext_resource type="Script" uid="uid://blinbcoxoouit" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_event_graph_node.gd" id="1_thsxi"]
+[ext_resource type="Script" uid="uid://cjpp776xf183y" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_event_graph_node.gd" id="1_thsxi"]
 
 [node name="DialogueEventGraphNode" type="GraphNode"]
 offset_right = 9.0
