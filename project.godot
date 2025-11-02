@@ -21,3 +21,10 @@ EventsManager="*res://addons/homero_framework/src/core/components/events/events_
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/gut/plugin.cfg", "res://addons/homero_framework/plugin.cfg")
+
+[input]
+
+interact={
+"deadzone": 0.2,
+"events": []
+}
