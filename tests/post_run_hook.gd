@@ -13,9 +13,18 @@ func run():
 	#Coverage.finalize(Coverage.Verbosity.FAILING_FILES)
 	var logger = gut.get_logger()
 	var coverage_passing = coverage.coverage_passing()
+	var coverage_percent = coverage.coverage_percent()
+	var coverage_count = coverage.coverage_count()
+	var coverage_line_count = coverage.coverage_line_count()
 	if !coverage_passing:
-		logger.failed("Coverage target of %.1f%% total (%.1f%% file) was not met" % [COVERAGE_TARGET, FILE_TARGET])
+		logger.failed(
+			"Coverage target not met:\nActual %.1f%% of %.1f%% total (%.1f%% file).\nLines covered %s/%s." %
+			[coverage_percent, COVERAGE_TARGET, FILE_TARGET, coverage_count, coverage_line_count]
+		)
 		set_exit_code(2)
 	else:
 		gut.set_log_level(gut.LOG_LEVEL_ALL_ASSERTS)
-		logger.passed("Coverage target of %.1f%% total, %.1f%% file coverage" % [COVERAGE_TARGET, FILE_TARGET])
+		logger.passed(
+			"Coverage target reached:\nActual %.1f%% of %.1f%% total, %.1f%% file coverage.\nLines covered %s/%s." %
+			[coverage_percent, COVERAGE_TARGET, FILE_TARGET, coverage_count, coverage_line_count]
+		)
