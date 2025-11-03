@@ -1,22 +1,34 @@
+## Popup control for creating new graph nodes in the dialogue editor.
 @tool
 extends Control
 
+## Emitted when a new starting step is requested.
 signal new_starting_step_requested()
+## Emitted when a new dialogue step is requested.
 signal new_dialogue_step_requested()
+## Emitted when a new dialogue option is requested.
 signal new_dialogue_option_requested()
+## Emitted when a new dialogue event is requested.
 signal new_dialogue_event_requested()
+## Emitted when a new dialogue speaker is requested.
 signal new_dialogue_speaker_requested()
+## Emitted when a new dialogue conditional is requested.
 signal new_dialogue_conditional_requested(conditional: HFEventConditional)
 
+## Reference to the container for conditional buttons.
 @onready var conditionals_buttons_container: Node = %ConditionalsButtonsContainer
+## Reference to the dropdown for conditionals list.
 @onready var conditionals_list_dropdown: Control = %ConditionalsListDropdown
+## Reference to the dialogue conditional button.
 @onready var dialogue_conditional_button: Control = %DialogueConditionalButton
 
 
+## Called when the node is added to the scene tree.
 func _ready() -> void:
 	_toggle_popup(false)
 
 
+## Sets up the popup at the given position.
 func setup(point: Vector2) -> void:
 	position = point
 	_toggle_popup(true)
