@@ -198,3 +198,27 @@ func test_version_checker_on_http_request_completed_with_parse_error() -> void:
 	assert_push_error(
 		"Error parsing response for version data %s with body %s" % [ERR_PARSE_ERROR, mock_response_body]
 	)
+
+
+func test_version_checker_can_check_version_multiple_times() -> void:
+	stub(
+		http_request_mock.request.bind(
+			version_checker.API_REQUEST_URL
+		)
+	).to_return(OK)
+	
+	version_checker.check_version("1.0.0")
+	assert_called(
+		http_request_mock,
+		"request",
+		[version_checker.API_REQUEST_URL]
+	)
+	
+	version_checker.check_version("1.0.1")
+	assert_called(
+		http_request_mock,
+		"request",
+		[version_checker.API_REQUEST_URL]
+	)
+	
+	assert_push_error_count(0)
