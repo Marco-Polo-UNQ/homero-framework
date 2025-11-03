@@ -1,6 +1,12 @@
 @tool
 extends Control
+## Graph editor for editing dialogue sequences visually in the editor.
+##
+## This editor allows users to create and manage dialogue sequences using a node-based
+## interface. Users can add dialogue steps, speakers, options, events, and conditionals,
+## and connect them to define the flow of the dialogue.
 
+# Preloaded scenes for different node types in the graph editor.
 const starting_step_node_scene: PackedScene = preload(
 	"res://addons/homero_framework/src/core/editor/dialogue/dialogue_starting_step_graph_node.tscn"
 )
@@ -20,13 +26,16 @@ const conditional_node_scene: PackedScene = preload(
 	"res://addons/homero_framework/src/core/editor/dialogue/dialogue_conditional_graph_node.tscn"
 )
 
+# References to UI elements in the graph editor.
 @onready var new_graph_node_popup: Control = %NewGraphNodePopup
 @onready var main_graph: GraphEdit = %MainGraph
 @onready var resource_path_label: Label = %ResourcePathLabel
 
+## The dialogue sequence being edited. Should be set with [method setup].
 var dialogue_sequence: HFDialogueSequence
 
 
+## Sets up the graph editor with the given dialogue sequence.
 func setup(p_dialogue_sequence: HFDialogueSequence) -> void:
 	dialogue_sequence = p_dialogue_sequence
 	_cache_references()
@@ -35,13 +44,12 @@ func setup(p_dialogue_sequence: HFDialogueSequence) -> void:
 	main_graph.clear_connections()
 	
 	for node: Node in main_graph.get_children():
-		## GraphEdit.get_children() also returns its connection layer
-		## Deleting the layer crashes the editor
+		# GraphEdit.get_children() also returns its connection layer
+		# Deleting the layer crashes the editor
 		if node.name != "_connection_layer":
 			main_graph.call_deferred("remove_child", node)
 			node.call_deferred("queue_free")
 	
-	var starting_steps: Array[HFDiagEditStartingStepNode] = []
 	var dialogue_steps: Array[HFDiagEditDialogueStepNode] = []
 	var speakers: Array[HFDiagEditSpeakerNode] = []
 	var options: Array[HFDiagEditDialogueOptionNode] = []
@@ -64,7 +72,6 @@ func setup(p_dialogue_sequence: HFDialogueSequence) -> void:
 		var starting_node: HFDiagEditStartingStepNode = _add_new_graph_node(
 			starting_step_node_scene, starting_step
 		) as HFDiagEditStartingStepNode
-		starting_steps.push_back(starting_node)
 		
 		for enable_condition: HFEventConditional in starting_step.enable_conditions:
 			var condition_node: HFDiagEditConditionalNode = _add_new_graph_node(
@@ -84,34 +91,38 @@ func _initialize_dialogue_step(
 	events: Array[HFDiagEditDialogueEventNode]
 ) -> void:
 	for option_data: HFDialogueOption in step_node.step_data.options:
-		var option_node: HFDiagEditDialogueOptionNode = _get_existing_node(
+		_verify_link_and_connect(
+			step_node,
+			option_node_scene,
 			option_data,
 			options,
-			StringName("option_data")
-		) as HFDiagEditDialogueOptionNode
-		if option_node == null:
-			option_node = _add_new_graph_node(
-				option_node_scene, option_data
-			) as HFDiagEditDialogueOptionNode
-			options.push_back(option_node)
-			
-			for enable_condition: HFEventConditional in option_data.enable_conditions:
-				var condition_node: HFDiagEditConditionalNode = _add_new_graph_node(
-					conditional_node_scene, enable_condition
-				) as HFDiagEditConditionalNode
-				option_node.handle_condition_connection(condition_node)
-			
-			if option_data.option_events != null:
-				_verify_link_and_connect(
-					option_node,
-					event_node_scene,
-					option_data.option_events,
-					events,
-					StringName("event_data"),
-					StringName("handle_event_connection")
-				)
-		
-		step_node.handle_option_connection(option_node)
+			&"option_data",
+			&"handle_option_connection",
+			func(
+				node_scene: PackedScene,
+				value_to_check,
+				list_to_add: Array
+			):
+				var option_node: HFDiagEditDialogueOptionNode = _create_new_node_default(
+					node_scene, value_to_check, list_to_add
+				) as HFDiagEditDialogueOptionNode
+				for enable_condition: HFEventConditional in option_data.enable_conditions:
+					var condition_node: HFDiagEditConditionalNode = _add_new_graph_node(
+						conditional_node_scene,
+						enable_condition
+					) as HFDiagEditConditionalNode
+					option_node.handle_condition_connection(condition_node)
+				if option_data.option_events != null:
+					_verify_link_and_connect(
+						option_node,
+						event_node_scene,
+						option_data.option_events,
+						events,
+						&"event_data",
+						&"handle_event_connection"
+					)
+				return option_node
+		)
 	
 	if step_node.step_data.speaker != null:
 		_verify_link_and_connect(
@@ -119,8 +130,8 @@ func _initialize_dialogue_step(
 			speaker_node_scene,
 			step_node.step_data.speaker,
 			speakers,
-			StringName("speaker_data"),
-			StringName("handle_speaker_connection")
+			&"speaker_data",
+			&"handle_speaker_connection"
 		)
 	
 	if step_node.step_data.dialogue_events != null:
@@ -129,8 +140,8 @@ func _initialize_dialogue_step(
 			event_node_scene,
 			step_node.step_data.dialogue_events,
 			events,
-			StringName("event_data"),
-			StringName("handle_event_connection")
+			&"event_data",
+			&"handle_event_connection"
 		)
 	
 	for other_step: HFDiagEditDialogueStepNode in dialogue_steps:
@@ -146,19 +157,31 @@ func _verify_link_and_connect(
 	value_to_check,
 	original_list: Array,
 	property_to_check: StringName,
-	connection_method: StringName
+	connection_method: StringName,
+	node_creation_method: Callable = _create_new_node_default
 ) -> void:
-	var node_to_connect: GraphNode
-	for existing_node: GraphNode in original_list:
-		if existing_node.get(property_to_check) == value_to_check:
-			node_to_connect = existing_node
-			break
+	var node_to_connect: GraphNode = _get_existing_node(
+		value_to_check,
+		original_list,
+		property_to_check
+	)
 	if node_to_connect == null:
-		node_to_connect = _add_new_graph_node(
-			node_scene, value_to_check
-		) as GraphNode
-		original_list.push_back(node_to_connect)
+		node_to_connect = node_creation_method.call(
+			node_scene, value_to_check, original_list
+		)
 	base_node.call(connection_method, node_to_connect)
+
+
+func _create_new_node_default(
+	node_scene: PackedScene,
+	value_to_check,
+	list_to_add: Array
+) -> GraphNode:
+	var new_node: GraphNode = _add_new_graph_node(
+		node_scene, value_to_check
+	) as GraphNode
+	list_to_add.push_back(new_node)
+	return new_node
 
 
 func _get_existing_node(
@@ -184,10 +207,15 @@ func _on_main_graph_connection_request(
 	to_node: StringName,
 	to_port: int
 ) -> void:
-	print("_on_main_graph_connection_request from node %s port %s to node %s port %s" % [from_node, from_port, to_node, to_port])
-	var from: GraphNode = main_graph.get_node(NodePath(from_node))
-	var to: GraphNode = main_graph.get_node(NodePath(to_node))
-	from.handle_connection(from_port, to, to_port)
+	HFLog.d("_on_main_graph_connection_request from node %s port %s to node %s port %s" % [from_node, from_port, to_node, to_port])
+	if !main_graph.has_node(NodePath(from_node)) || !main_graph.has_node(NodePath(to_node)):
+		HFLog.e("From Node %s or To Node %s do not exist in main graph." % [from_node, to_node])
+		return
+	main_graph.get_node(NodePath(from_node)).handle_connection(
+		from_port,
+		main_graph.get_node(NodePath(to_node)),
+		to_port
+	)
 
 
 func _on_main_graph_disconnection_request(
@@ -196,10 +224,15 @@ func _on_main_graph_disconnection_request(
 	to_node: StringName,
 	to_port: int
 ) -> void:
-	print("_on_main_graph_disconnection_request from node %s port %s to node %s port %s" % [from_node, from_port, to_node, to_port])
-	var from: GraphNode = main_graph.get_node(NodePath(from_node))
-	var to: GraphNode = main_graph.get_node(NodePath(to_node))
-	from.handle_disconnection(from_port, to, to_port)
+	HFLog.d("_on_main_graph_disconnection_request from node %s port %s to node %s port %s" % [from_node, from_port, to_node, to_port])
+	if !main_graph.has_node(NodePath(from_node)) || !main_graph.has_node(NodePath(to_node)):
+		HFLog.e("From Node %s or To Node %s do not exist in main graph." % [from_node, to_node])
+		return
+	main_graph.get_node(NodePath(from_node)).handle_disconnection(
+		from_port,
+		main_graph.get_node(NodePath(to_node)),
+		to_port
+	)
 	main_graph.disconnect_node(
 		from_node,
 		from_port,
@@ -213,9 +246,11 @@ func _on_main_graph_connection_to_empty(
 	from_port: int,
 	release_position: Vector2
 ) -> void:
-	print("_on_main_graph_connection_to_empty from node %s port %s position %s" % [from_node, from_port, release_position])
-	var from: GraphNode = main_graph.get_node(NodePath(from_node))
-	from.handle_disconnection(from_port)
+	HFLog.d("_on_main_graph_connection_to_empty from node %s port %s position %s" % [from_node, from_port, release_position])
+	if !main_graph.has_node(NodePath(from_node)):
+		HFLog.e("From Node %s do not exist in main graph." % [from_node])
+		return
+	main_graph.get_node(NodePath(from_node)).handle_disconnection(from_port)
 
 
 func _on_connect_ports_requested(
@@ -225,6 +260,9 @@ func _on_connect_ports_requested(
 	to_port: int,
 	disconnect_previous: bool = true
 ) -> void:
+	if !main_graph.has_node(NodePath(from_node)) || !main_graph.has_node(NodePath(to_node)):
+		HFLog.e("From Node %s or To Node %s do not exist in main graph." % [from_node, to_node])
+		return
 	if disconnect_previous:
 		_disconnect_port_from(from_node, from_port)
 	main_graph.connect_node(
@@ -241,7 +279,10 @@ func _on_disconnect_ports_requested(
 	to_node: StringName,
 	to_port: int
 ) -> void:
-	if to_node.is_empty():
+	if !main_graph.has_node(NodePath(from_node)):
+		HFLog.e("From Node %s does not exist in main graph." % [from_node])
+		return
+	if !main_graph.has_node(NodePath(to_node)):
 		_disconnect_port_from(from_node, from_port)
 	else:
 		main_graph.disconnect_node(
@@ -296,7 +337,7 @@ func _on_main_graph_delete_nodes_request(nodes: Array[StringName]) -> void:
 
 
 func _on_main_graph_popup_request(popup_position: Vector2) -> void:
-	print("_on_main_graph_popup_request position %s" % popup_position)
+	HFLog.d("_on_main_graph_popup_request position %s" % popup_position)
 	new_graph_node_popup.setup(popup_position)
 
 

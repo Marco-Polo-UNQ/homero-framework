@@ -1,12 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://dqcx1oludr3xh"]
+[gd_scene load_steps=3 format=3 uid="uid://dqcx1oludr3xh"]
 
-[ext_resource type="Script" uid="uid://bsneyw4pyb2ad" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_graph_editor.gd" id="1_e80xw"]
-[ext_resource type="PackedScene" uid="uid://b3my2225ekjju" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_starting_step_graph_node.tscn" id="2_jo8vy"]
-[ext_resource type="PackedScene" uid="uid://cvpng8w7nxjpn" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_conditional_graph_node.tscn" id="3_ds1hu"]
-[ext_resource type="PackedScene" uid="uid://c1b0qtfn8pyl" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_step_graph_node.tscn" id="4_jt3tp"]
-[ext_resource type="PackedScene" uid="uid://j3m0k5pu11p6" path="res://addons/homero_framework/src/core/editor/dialogue/speaker_graph_node.tscn" id="5_d5hy6"]
-[ext_resource type="PackedScene" uid="uid://d2idl8nw74ibj" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_option_graph_node.tscn" id="6_lw8o6"]
-[ext_resource type="PackedScene" uid="uid://n5eojx7b6rph" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_event_graph_node.tscn" id="7_vdskr"]
+[ext_resource type="Script" uid="uid://dkun31e1smgka" path="res://addons/homero_framework/src/core/editor/dialogue/dialogue_graph_editor.gd" id="1_e80xw"]
 [ext_resource type="PackedScene" uid="uid://drv111ylkf284" path="res://addons/homero_framework/src/core/editor/dialogue/new_graph_node_popup.tscn" id="8_l8hd4"]
 
 [node name="DialogueEditor" type="Control"]
@@ -36,53 +30,6 @@ grow_horizontal = 2
 grow_vertical = 2
 right_disconnects = true
 minimap_size = Vector2(120, 80)
-
-[node name="StartingStepNode" parent="MainGraph" instance=ExtResource("2_jo8vy")]
-layout_mode = 0
-offset_left = 274.0
-offset_top = 234.0
-offset_right = 433.0
-offset_bottom = 345.0
-
-[node name="DialogueConditionalGraphNode" parent="MainGraph" instance=ExtResource("3_ds1hu")]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 228.0
-offset_right = 259.0
-offset_bottom = 306.0
-mouse_filter = 1
-position_offset = Vector2(80, 228)
-
-[node name="DialogueStepGraphNode" parent="MainGraph" instance=ExtResource("4_jt3tp")]
-layout_mode = 0
-offset_left = 584.0
-offset_top = 243.0
-offset_right = 721.0
-offset_bottom = 456.0
-
-[node name="SpeakerGraphNode" parent="MainGraph" instance=ExtResource("5_d5hy6")]
-layout_mode = 0
-offset_left = 451.0
-offset_top = 98.0
-offset_right = 585.0
-offset_bottom = 211.0
-position_offset = Vector2(451, 98)
-
-[node name="DialogueOptionGraphNode" parent="MainGraph" instance=ExtResource("6_lw8o6")]
-layout_mode = 0
-offset_left = 764.0
-offset_top = 221.0
-offset_right = 940.0
-offset_bottom = 409.0
-position_offset = Vector2(764, 221)
-
-[node name="DialogueEventGraphNode" parent="MainGraph" instance=ExtResource("7_vdskr")]
-layout_mode = 0
-offset_left = 919.0
-offset_top = 112.0
-offset_right = 1082.0
-offset_bottom = 190.0
-position_offset = Vector2(919, 112)
 
 [node name="NewGraphNodePopup" parent="." instance=ExtResource("8_l8hd4")]
 unique_name_in_owner = true
