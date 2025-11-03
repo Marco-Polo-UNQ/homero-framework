@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://j3m0k5pu11p6"]
 
-[ext_resource type="Script" uid="uid://ct76umwvq7apm" path="res://addons/homero_framework/src/core/editor/dialogue/speaker_graph_node.gd" id="1_2msew"]
+[ext_resource type="Script" uid="uid://c2mfc5206rcbj" path="res://addons/homero_framework/src/core/editor/dialogue/speaker_graph_node.gd" id="1_2msew"]
 
 [node name="SpeakerGraphNode" type="GraphNode"]
 mouse_filter = 1
