@@ -1,39 +1,38 @@
 @tool
 class_name HFDiagEditDialogueStepNode
 extends GraphNode
+## Graph node for editing dialogue steps in the dialogue editor.
 
+## Emitted when a request to connect ports is made.
 signal connect_ports_requested(from_node: StringName, from_port: int, to_node: StringName, to_port: int)
+## Emitted when a request to disconnect ports is made.
 signal disconnect_ports_requested(from_node: StringName, from_port: int, to_node: StringName, to_port: int)
+## Emitted when this node is deleted.
 signal delete_called(step_data: HFDialogueStep)
 
+## Reference to the LineEdit for the step id.
 var step_id_line_edit: LineEdit
 
+## The dialogue step data represented by this node.
 var step_data: HFDialogueStep
 
+## Reference to the dialogue step node connected as the next step.
+var next_step: HFDiagEditDialogueStepNode
 
-func _ready() -> void:
-	position_offset_changed.connect(
-		func():
-			step_data.graph_position = position_offset
-	)
+## Reference to the speaker node connected to this dialogue step.
+var speaker: HFDiagEditSpeakerNode
+
+## Reference to the dialogue option nodes connected to this dialogue step.
+var dialogue_event_node: HFDiagEditDialogueEventNode
 
 
+## Sets up the node with the given dialogue step data.
 func setup(dialogue_step: HFDialogueStep) -> void:
 	step_data = dialogue_step
 	_cache_references()
 	step_id_line_edit.text = dialogue_step.dialogue_key
 
-
-func _on_step_id_line_edit_text_changed(new_text: String) -> void:
-	step_data.dialogue_key = new_text
-
-
-func _cache_references() -> void:
-	step_id_line_edit = %StepIdLineEdit
-
-
-var next_step: HFDiagEditDialogueStepNode
-
+## Handles connection to a dialogue step node.
 func handle_step_connection(
 	dialogue_step_node: HFDiagEditDialogueStepNode,
 	is_new: bool = false
@@ -58,14 +57,7 @@ func handle_step_connection(
 		if !next_step.delete_called.is_connected(_on_next_step_deleted):
 			next_step.delete_called.connect(_on_next_step_deleted)
 
-func _on_next_step_deleted(deleted_step: HFDialogueStep) -> void:
-	if step_data.next_step_id == deleted_step.unique_id:
-		step_data.next_step_id = -1
-		next_step = null
-
-
-var speaker: HFDiagEditSpeakerNode
-
+## Handles connection to a speaker node.
 func handle_speaker_connection(
 	speaker_node: HFDiagEditSpeakerNode,
 	is_new: bool = false
@@ -87,12 +79,7 @@ func handle_speaker_connection(
 		if !speaker.delete_called.is_connected(_on_speaker_deleted):
 			speaker.delete_called.connect(_on_speaker_deleted)
 
-func _on_speaker_deleted(speaker_data: HFDialogueSpeaker) -> void:
-	if step_data.speaker == speaker_data:
-		step_data.speaker = null
-		speaker = null
-
-
+## Handles connection to a dialogue option node.
 func handle_option_connection(
 	option_node: HFDiagEditDialogueOptionNode,
 	is_new: bool = false
@@ -111,13 +98,7 @@ func handle_option_connection(
 		if !option_node.delete_called.is_connected(_on_option_deleted):
 			option_node.delete_called.connect(_on_option_deleted)
 
-func _on_option_deleted(option_data: HFDialogueOption) -> void:
-	if step_data.options.has(option_data):
-		step_data.options.erase(option_data)
-
-
-var dialogue_event_node: HFDiagEditDialogueEventNode
-
+## Handles connection to a dialogue event node.
 func handle_event_connection(
 	event_node: HFDiagEditDialogueEventNode,
 	is_new: bool = false
@@ -139,12 +120,7 @@ func handle_event_connection(
 		if !dialogue_event_node.delete_called.is_connected(_on_dialogue_event_deleted):
 			dialogue_event_node.delete_called.connect(_on_dialogue_event_deleted)
 
-func _on_dialogue_event_deleted(dialogue_data: HFEventTriggerGroup) -> void:
-	if step_data.dialogue_events == dialogue_data:
-		step_data.dialogue_events = null
-		dialogue_event_node = null
-
-
+## Handles a connection from another node.
 func handle_connection(
 	from_port: int,
 	to_node: GraphNode,
@@ -163,7 +139,7 @@ func handle_connection(
 		if dialogue_event_node != to_node:
 			handle_event_connection(to_node, true)
 
-
+## Handles disconnection from a connected node.
 func handle_disconnection(
 	from_port: int,
 	to_node: GraphNode = null,
@@ -215,6 +191,46 @@ func handle_disconnection(
 				to_port
 			)
 
-
+## Handles deletion from this node.
 func handle_delete() -> void:
 	delete_called.emit(step_data)
+
+
+# Called when the node is added to the scene tree.
+func _ready() -> void:
+	position_offset_changed.connect(_on_position_offset_changed)
+
+
+func _on_position_offset_changed() -> void:
+	step_data.graph_position = position_offset
+
+
+func _on_step_id_line_edit_text_changed(new_text: String) -> void:
+	step_data.dialogue_key = new_text
+
+
+func _cache_references() -> void:
+	step_id_line_edit = %StepIdLineEdit
+
+
+func _on_next_step_deleted(deleted_step: HFDialogueStep) -> void:
+	if step_data.next_step_id == deleted_step.unique_id:
+		step_data.next_step_id = -1
+		next_step = null
+
+
+func _on_speaker_deleted(speaker_data: HFDialogueSpeaker) -> void:
+	if step_data.speaker == speaker_data:
+		step_data.speaker = null
+		speaker = null
+
+
+func _on_option_deleted(option_data: HFDialogueOption) -> void:
+	if step_data.options.has(option_data):
+		step_data.options.erase(option_data)
+
+
+func _on_dialogue_event_deleted(dialogue_data: HFEventTriggerGroup) -> void:
+	if step_data.dialogue_events == dialogue_data:
+		step_data.dialogue_events = null
+		dialogue_event_node = null
