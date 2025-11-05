@@ -3,6 +3,7 @@ extends Node
 var Optparse = load('res://addons/gut/cli/optparse.gd')
 var Gut = load('res://addons/gut/gut.gd')
 var GutRunner = load('res://addons/gut/gui/GutRunner.tscn')
+var RunExternallyScene = load("res://addons/gut/gui/RunExternally.tscn")
 
 # ------------------------------------------------------------------------------
 # Helper class to resolve the various different places where an option can
@@ -131,6 +132,7 @@ an immediate "=":
 	opts.add('-gignore_pause', false, 'Ignores any calls to pause_before_teardown.')
 	opts.add('-gno_error_tracking', false, 'Disable error tracking.')
 	opts.add('-gfailure_error_types', options.failure_error_types, 'Error types that will cause tests to fail if the are encountered during the execution of a test.  Default "[default]"')
+	opts.add('-gblocking_mode', 'Blocking', 'Choose if GUT runs the tests in blocking mode or non blocking mode. Valid values are [Blocking, NonBlocking]')
 
 	opts.add_heading("Display Settings:")
 	opts.add('-glog', options.log_level, 'Log level [0-3].  Default [default]')
@@ -200,6 +202,7 @@ func extract_command_line_options(from, to):
 	to.failure_error_types = from.get_value_or_null('-gfailure_error_types')
 	to.no_error_tracking = from.get_value_or_null('-gno_error_tracking')
 	to.raie = from.get_value_or_null('-graie')
+	to.blocking_mode = from.get_value_or_null('-gblocking_mode')
 
 
 
@@ -228,14 +231,23 @@ func _run_tests(opt_resolver):
 	_final_opts = opt_resolver.get_resolved_values();
 	_gut_config.options = _final_opts
 
-	var runner = GutRunner.instantiate()
-	runner.set_gut_config(_gut_config)
-	get_tree().root.add_child(runner)
-
-	if(opt_resolver.cmd_opts.raie):
-		runner.run_from_editor()
+	if opt_resolver.cmd_opts.blocking_mode == 'NonBlocking':
+		var _shell_out_panel = RunExternallyScene.instantiate()
+		_shell_out_panel.blocking_mode = 'NonBlocking'
+		#_shell_out_panel.additional_arguments = _ctrls.run_externally_dialog.get_additional_arguments_array()
+		get_tree().root.add_child(_shell_out_panel)
+		_shell_out_panel.run_tests()
+		await get_tree().create_timer(0.1).timeout
+		get_tree().quit(0)
 	else:
-		runner.run_tests()
+		var runner = GutRunner.instantiate()
+		runner.set_gut_config(_gut_config)
+		get_tree().root.add_child(runner)
+
+		if(opt_resolver.cmd_opts.raie):
+			runner.run_from_editor()
+		else:
+			runner.run_tests()
 
 
 # parse options and run Gut

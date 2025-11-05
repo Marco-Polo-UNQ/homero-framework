@@ -41,7 +41,8 @@ var _text_buffer = ''
 var bottom_panel = null :
 	set(val):
 		bottom_panel = val
-		bottom_panel.resized.connect(_on_bottom_panel_resized)
+		if bottom_panel != null:
+			bottom_panel.resized.connect(_on_bottom_panel_resized)
 var blocking_mode = "Blocking"
 var additional_arguments = []
 var remove_escape_characters = true

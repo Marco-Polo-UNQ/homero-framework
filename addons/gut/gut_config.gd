@@ -58,6 +58,8 @@ var default_options = {
 	wait_log_delay = .5,
 
 	gut_on_top = true,
+	
+	blocking_mode = 'Blocking'
 }
 
 
