@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://qvirg5poygs1"]
+
+[ext_resource type="Script" uid="uid://dyggdycevn74d" path="res://addons/homero_framework/src/core/components/screens/screen_manager.gd" id="1_ohoce"]
+[ext_resource type="Script" uid="uid://kmhmxbrkfu7u" path="res://addons/homero_framework/src/core/components/screens/screen_loader.gd" id="2_a6j66"]
+
+[node name="HFScreenManager" type="Node" node_paths=PackedStringArray("starting_screen", "screens")]
+script = ExtResource("1_ohoce")
+starting_screen = NodePath("LoadingScreenLoader")
+screens = [NodePath("LoadingScreenLoader"), NodePath("Screen1Loader"), NodePath("Screen2Loader")]
+metadata/_custom_type_script = "uid://dyggdycevn74d"
+
+[node name="LoadingScreenLoader" type="Node" parent="."]
+script = ExtResource("2_a6j66")
+screen_path = "uid://btw6pt4ypfa43"
+metadata/_custom_type_script = "uid://kmhmxbrkfu7u"
+
+[node name="Screen1Loader" type="Node" parent="."]
+script = ExtResource("2_a6j66")
+screen_id = 1
+screen_path = "uid://cej4prvw1gjxj"
+metadata/_custom_type_script = "uid://kmhmxbrkfu7u"
+
+[node name="Screen2Loader" type="Node" parent="."]
+script = ExtResource("2_a6j66")
+screen_id = 2
+screen_path = "uid://c5488fnl3xypq"
+metadata/_custom_type_script = "uid://kmhmxbrkfu7u"

@@ -1,0 +1,61 @@
+[gd_scene load_steps=2 format=3 uid="uid://cej4prvw1gjxj"]
+
+[ext_resource type="Script" uid="uid://pemxglwycmya" path="res://addons/homero_framework/examples/screens/screen_example.gd" id="1_okwq0"]
+
+[node name="Screen1Example" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_okwq0")
+next_screen_id = 2
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -77.5
+offset_right = 33.0
+offset_bottom = -54.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Screen 1"
+
+[node name="LoadScreenNormalButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Load next screen directly"
+
+[node name="LoadScreenAsyncButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.0
+offset_top = 42.5
+offset_right = 70.0
+offset_bottom = 73.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Load next screen with loading screen"
+
+[connection signal="pressed" from="LoadScreenNormalButton" to="." method="_on_load_screen_normal_button_pressed"]
+[connection signal="pressed" from="LoadScreenAsyncButton" to="." method="_on_load_screen_async_button_pressed"]

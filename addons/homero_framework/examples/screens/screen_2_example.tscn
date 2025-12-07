@@ -1,0 +1,65 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5488fnl3xypq"]
+
+[ext_resource type="Script" uid="uid://pemxglwycmya" path="res://addons/homero_framework/examples/screens/screen_example.gd" id="1_7r8rj"]
+
+[sub_resource type="Gradient" id="Gradient_7r8rj"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mmxf4"]
+gradient = SubResource("Gradient_7r8rj")
+width = 4096
+height = 4096
+
+[node name="Screen2Example" type="Node2D"]
+script = ExtResource("1_7r8rj")
+next_screen_id = 1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = SubResource("GradientTexture2D_mmxf4")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -77.5
+offset_right = 33.0
+offset_bottom = -54.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Screen 2"
+
+[node name="LoadScreenNormalButton" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Load next screen directly"
+
+[node name="LoadScreenAsyncButton" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.0
+offset_top = 42.5
+offset_right = 70.0
+offset_bottom = 73.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Load next screen with loading screen"
+
+[connection signal="pressed" from="LoadScreenNormalButton" to="." method="_on_load_screen_normal_button_pressed"]
+[connection signal="pressed" from="LoadScreenAsyncButton" to="." method="_on_load_screen_async_button_pressed"]

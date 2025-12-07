@@ -13,5 +13,7 @@ extends Object
 ##     }
 ## [/codeblock]
 enum SCREENS {
-	DEFAULT
+	LOADING,
+	SCREEN1,
+	SCREEN2
 }
