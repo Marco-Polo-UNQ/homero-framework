@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bowcwg03blnj"]
-
-[ext_resource type="Script" uid="uid://dyggdycevn74d" path="res://addons/homero_framework/src/core/components/screens/screen_manager.gd" id="1_r2v5i"]
-
-[node name="MainExample" type="Node"]
-script = ExtResource("1_r2v5i")
