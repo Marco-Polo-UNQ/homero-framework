@@ -11,6 +11,11 @@ extends Node
 ## [param value] Optional value to pass to the target screen.
 signal change_screen(target_screen: int, value: Variant)
 
+## Emitted when the screen requests preloading of another screen.
+## [param target_screen] The id of the screen to preload.
+## [param confirmation_callback] The callback receiving the path to the screen to make checks against.
+signal request_preload_screen(target_screen: int, confirmation_callback: Callable)
+
 ## Emitted when the screen has finished its exit logic and can be safely removed.
 signal finished_exit()
 

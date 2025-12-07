@@ -19,6 +19,11 @@ extends Node
 ## [param value] Optional value to pass to the target screen's [method HFScreen.enter].
 signal change_screen(screen_id: int, value: Variant)
 
+## Emitted when a request to preload another screen is made.
+## [param target_screen] the id of the screen to preload.
+## [param confirmation_callback] the callback receiving the path to the screen to make checks against.
+signal request_preload_screen(target_screen: int, confirmation_callback: Callable)
+
 ## The unique identifier for this screen.
 @export var screen_id: HFScreenConstants.SCREENS
 
@@ -29,6 +34,9 @@ signal change_screen(screen_id: int, value: Variant)
 ## The currently loaded [HFScreen] instance.
 var screen: HFScreen
 
+# Threaded scene instancer for instancing screens asynchronously, reducing lag.
+var _threaded_scene_instancer: HFThreadedSceneInstancer = HFThreadedSceneInstancer.new()
+
 
 ## Loads and enters the [HFScreen] scene.
 ## Uses [method ResourceLoader.load_threaded_get()] for threaded loading if available,
@@ -36,15 +44,26 @@ var screen: HFScreen
 ## [param value] Optional value to pass to the screen's [method HFScreen.enter].
 func enter(value: Variant = null) -> void:
 	_remove_screen()
+	var scene: PackedScene
 	if ResourceLoader.load_threaded_get_status(screen_path) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
 		HFLog.d("Loading via @GDScript.load")
-		screen = (load(screen_path) as PackedScene).instantiate() as HFScreen
+		scene = (load(screen_path) as PackedScene)
 	else:
 		HFLog.d("Loading via ResourceLoader.load_threaded_get")
-		var scene: PackedScene = ResourceLoader.load_threaded_get(screen_path)
-		screen = scene.instantiate() as HFScreen
+		scene = ResourceLoader.load_threaded_get(screen_path)
+	if _threaded_scene_instancer.instance_created.is_connected(_enter_instanced_screen):
+		_threaded_scene_instancer.instance_created.disconnect(_enter_instanced_screen)
+	_threaded_scene_instancer.instance_created.connect(_enter_instanced_screen.bind(value))
+	_threaded_scene_instancer.instantiate_scene(scene)
+
+
+# Enters the given screen instance by adding it as a child and calling its
+# [method HFScreen.enter].
+func _enter_instanced_screen(screen_instance: Node, value: Variant = null) -> void:
+	screen = screen_instance
 	add_child(screen)
 	screen.change_screen.connect(_on_change_screen)
+	screen.request_preload_screen.connect(request_preload_screen.emit)
 	screen.enter(value)
 
 
@@ -53,6 +72,12 @@ func enter(value: Variant = null) -> void:
 func exit() -> void:
 	screen.finished_exit.connect(_remove_screen)
 	screen.exit()
+
+
+## Calls [method ResourceLoader.load_threaded_request] and returns the screen path.
+func preload_screen() -> String:
+	ResourceLoader.load_threaded_request(screen_path, "PackedScene")
+	return screen_path
 
 
 # Handles the [signal HFScreen.change_screen] signal from the screen.
@@ -68,3 +93,10 @@ func _remove_screen() -> void:
 			remove_child(screen)
 		screen.queue_free()
 		screen = null
+
+
+# Handles the [NOTIFICATION_EXIT_TREE] notification.
+# Destroys the threaded scene instancer to free resources.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_EXIT_TREE:
+		_threaded_scene_instancer.destroy()

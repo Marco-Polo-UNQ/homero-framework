@@ -51,6 +51,11 @@ func test_screen_manager_starts_with_starting_screen() -> void:
 			screen_manager._change_screen
 		)
 	)
+	assert_true(
+		starting_screen_stub.request_preload_screen.is_connected(
+			screen_manager._on_request_preload_screen
+		)
+	)
 	assert_called_count(
 		starting_screen_stub.enter,
 		1
@@ -100,6 +105,36 @@ func test_screen_manager_handles_invalid_screen_change() -> void:
 		screen_manager._current_screen,
 		starting_screen_stub
 	)
+	assert_push_error(
+		"Screen with id 999 does not exist!"
+	)
+
+
+func test_screen_manager_handles_screen_preload_request() -> void:
+	var path_to_screen: String = "res://path/to/screen.tscn"
+	stub(another_screen_stub.preload_screen).to_return(path_to_screen)
+
+	starting_screen_stub.request_preload_screen.emit(
+		1,
+		func(screen_path: String) -> void:
+			assert_eq(
+				screen_path,
+				path_to_screen
+			)
+	)
+	assert_called_count(
+		another_screen_stub.preload_screen,
+		1
+	)
+
+
+func test_screen_manager_handles_invalid_screen_preload_request() -> void:
+	starting_screen_stub.request_preload_screen.emit(
+		999,
+		func(_screen_path: String) -> void:
+			pass
+	)
+	await gut.get_tree().physics_frame
 	assert_push_error(
 		"Screen with id 999 does not exist!"
 	)

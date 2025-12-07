@@ -51,10 +51,28 @@ func _change_screen(screen_id: int, value = null) -> void:
 		_current_screen.exit()
 		if _current_screen.change_screen.is_connected(_change_screen):
 			_current_screen.change_screen.disconnect(_change_screen)
+		if _current_screen.request_preload_screen.is_connected(_on_request_preload_screen):
+			_current_screen.request_preload_screen.disconnect(_on_request_preload_screen)
 	# Get the reference and load it
 	_current_screen = _screens_map[screen_id]
 	if !_current_screen.change_screen.is_connected(_change_screen):
 		_current_screen.change_screen.connect(_change_screen)
+	if !_current_screen.request_preload_screen.is_connected(_on_request_preload_screen):
+		_current_screen.request_preload_screen.connect(_on_request_preload_screen)
 	# Then initialize it and emit a signal
 	_current_screen.enter(value)
 	screen_changed.emit(screen_id)
+
+
+# Private preload request handling method. It calls the [param screen_id] to preload, and
+# calls the [param confirmation_callback] if not null with the screen path.
+func _on_request_preload_screen(
+	screen_id: int,
+	confirmation_callback: Callable
+) -> void:
+	if !_screens_map.has(screen_id):
+		HFLog.e("Screen with id %s does not exist!" % screen_id)
+		return
+	
+	var screen_loader: HFScreenLoader = _screens_map[screen_id]
+	confirmation_callback.call(screen_loader.preload_screen())
