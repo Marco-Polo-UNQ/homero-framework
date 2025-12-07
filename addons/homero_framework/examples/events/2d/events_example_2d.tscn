@@ -1,0 +1,241 @@
+[gd_scene load_steps=23 format=3 uid="uid://drbolwn5b25r6"]
+
+[ext_resource type="Texture2D" uid="uid://dblav2tlyvw3y" path="res://icon.svg" id="1_4loaq"]
+[ext_resource type="Script" uid="uid://bjs2bi3rjdy5j" path="res://addons/homero_framework/examples/events/2d/character_body_2d_controller.gd" id="1_x7nji"]
+[ext_resource type="Script" uid="uid://csgjhpvbpbnhh" path="res://addons/homero_framework/examples/events/2d/node_2d_controller.gd" id="3_6tyrj"]
+[ext_resource type="Script" uid="uid://bn0nucb8sysr1" path="res://addons/homero_framework/src/core/components/events/triggers/trigger_area_2d.gd" id="3_8ll4i"]
+[ext_resource type="Script" uid="uid://okd6y7h6n0lh" path="res://addons/homero_framework/src/core/components/events/listeners/event_listener.gd" id="4_otqch"]
+[ext_resource type="Script" uid="uid://bxnsdhgrj76c2" path="res://addons/homero_framework/src/core/components/events/triggers/event_trigger_group.gd" id="4_x7nji"]
+[ext_resource type="Script" uid="uid://biu2pbbfhl4f0" path="res://addons/homero_framework/src/core/components/events/listeners/conditionals/event_conditional.gd" id="5_x7nji"]
+[ext_resource type="Script" uid="uid://b76jocf8kwod8" path="res://addons/homero_framework/src/core/components/events/listeners/conditionals/condition_all_pass.gd" id="6_6tyrj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pqppa"]
+size = Vector2(32, 32)
+
+[sub_resource type="Resource" id="Resource_idg32"]
+script = ExtResource("6_6tyrj")
+event_tags = PackedStringArray("enable_body")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[sub_resource type="Resource" id="Resource_p5lav"]
+script = ExtResource("6_6tyrj")
+event_tags = PackedStringArray("enable_area")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[sub_resource type="Resource" id="Resource_0ngw3"]
+script = ExtResource("6_6tyrj")
+event_tags = PackedStringArray("toggle_sprite")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[sub_resource type="Resource" id="Resource_5p04j"]
+script = ExtResource("4_x7nji")
+events_enable = PackedStringArray("enable_body")
+events_disable = PackedStringArray("enable_area")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ccq8n"]
+
+[sub_resource type="Resource" id="Resource_ccq8n"]
+script = ExtResource("6_6tyrj")
+event_tags = PackedStringArray("enable_body")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[sub_resource type="Resource" id="Resource_6tyrj"]
+script = ExtResource("4_x7nji")
+events_enable = PackedStringArray("toggle_sprite")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="Resource" id="Resource_i1hk0"]
+script = ExtResource("4_x7nji")
+events_disable = PackedStringArray("toggle_sprite")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x7nji"]
+size = Vector2(128, 128)
+
+[sub_resource type="Resource" id="Resource_c5ass"]
+script = ExtResource("4_x7nji")
+events_enable = PackedStringArray("enable_area")
+events_disable = PackedStringArray("enable_body")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="Resource" id="Resource_kgr1x"]
+script = ExtResource("6_6tyrj")
+event_tags = PackedStringArray("enable_area")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[sub_resource type="Resource" id="Resource_cu3j7"]
+script = ExtResource("4_x7nji")
+events_enable = PackedStringArray("enable_body")
+events_disable = PackedStringArray("enable_area")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="Resource" id="Resource_djw41"]
+script = ExtResource("6_6tyrj")
+event_tags = PackedStringArray("enable_body")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[node name="EventsExample2D" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Characters" type="Node2D" parent="."]
+
+[node name="Player1" type="CharacterBody2D" parent="Characters"]
+position = Vector2(0, -139)
+script = ExtResource("1_x7nji")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Characters/Player1"]
+shape = SubResource("RectangleShape2D_pqppa")
+
+[node name="Sprite2D" type="Sprite2D" parent="Characters/Player1"]
+modulate = Color(0, 1, 0, 1)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_4loaq")
+
+[node name="HFEventListenerBody" type="Node" parent="Characters/Player1"]
+script = ExtResource("4_otqch")
+listener_conditionals = Array[ExtResource("5_x7nji")]([SubResource("Resource_idg32")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="Player2" type="Area2D" parent="Characters"]
+position = Vector2(0, 137)
+script = ExtResource("3_6tyrj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Characters/Player2"]
+shape = SubResource("RectangleShape2D_pqppa")
+
+[node name="Sprite2D" type="Sprite2D" parent="Characters/Player2"]
+modulate = Color(1, 0, 0, 1)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_4loaq")
+
+[node name="HFEventListenerArea" type="Node" parent="Characters/Player2"]
+script = ExtResource("4_otqch")
+listener_conditionals = Array[ExtResource("5_x7nji")]([SubResource("Resource_p5lav")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="ToggleableSprite" type="Sprite2D" parent="."]
+position = Vector2(-264, 3)
+texture = ExtResource("1_4loaq")
+
+[node name="HFEventListener" type="Node" parent="ToggleableSprite"]
+script = ExtResource("4_otqch")
+listener_conditionals = Array[ExtResource("5_x7nji")]([SubResource("Resource_0ngw3")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="HFTriggerArea2DStart" type="Area2D" parent="."]
+position = Vector2(-1, -138)
+monitorable = false
+script = ExtResource("3_8ll4i")
+collision_bodies = true
+collision_events_on_enter = SubResource("Resource_5p04j")
+metadata/_custom_type_script = "uid://bn0nucb8sysr1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HFTriggerArea2DStart"]
+shape = SubResource("RectangleShape2D_ccq8n")
+
+[node name="HFEventListener" type="Node" parent="HFTriggerArea2DStart"]
+script = ExtResource("4_otqch")
+listener_conditionals = Array[ExtResource("5_x7nji")]([SubResource("Resource_ccq8n")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="HFTriggerArea2DToggleSprite" type="Area2D" parent="."]
+position = Vector2(-94, -2)
+script = ExtResource("3_8ll4i")
+collision_areas = true
+collision_bodies = true
+collision_events_on_enter = SubResource("Resource_6tyrj")
+collision_events_on_exit = SubResource("Resource_i1hk0")
+metadata/_custom_type_script = "uid://bn0nucb8sysr1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HFTriggerArea2DToggleSprite"]
+shape = SubResource("RectangleShape2D_x7nji")
+
+[node name="ColorRect" type="ColorRect" parent="HFTriggerArea2DToggleSprite"]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+color = Color(1, 1, 1, 0.44705883)
+
+[node name="HFTriggerArea2DEnableArea" type="Area2D" parent="."]
+position = Vector2(327, -148)
+monitorable = false
+script = ExtResource("3_8ll4i")
+interaction_bodies = true
+interaction_events_on_pressed = SubResource("Resource_c5ass")
+metadata/_custom_type_script = "uid://bn0nucb8sysr1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HFTriggerArea2DEnableArea"]
+shape = SubResource("RectangleShape2D_x7nji")
+
+[node name="ColorRect" type="ColorRect" parent="HFTriggerArea2DEnableArea"]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+color = Color(1, 1, 1, 0.44705883)
+
+[node name="HFEventListener" type="Node" parent="HFTriggerArea2DEnableArea"]
+script = ExtResource("4_otqch")
+listener_conditionals = Array[ExtResource("5_x7nji")]([SubResource("Resource_kgr1x")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="Label" type="Label" parent="HFTriggerArea2DEnableArea"]
+offset_left = 78.0
+offset_top = -28.0
+offset_right = 200.0
+offset_bottom = 21.0
+text = "Green
+Press E or Enter"
+
+[node name="HFTriggerArea2DEnableBody" type="Area2D" parent="."]
+position = Vector2(326, 152)
+monitorable = false
+script = ExtResource("3_8ll4i")
+interaction_areas = true
+interaction_events_on_pressed = SubResource("Resource_cu3j7")
+metadata/_custom_type_script = "uid://bn0nucb8sysr1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HFTriggerArea2DEnableBody"]
+shape = SubResource("RectangleShape2D_x7nji")
+
+[node name="ColorRect" type="ColorRect" parent="HFTriggerArea2DEnableBody"]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+color = Color(1, 1, 1, 0.44705883)
+
+[node name="HFEventListener" type="Node" parent="HFTriggerArea2DEnableBody"]
+script = ExtResource("4_otqch")
+listener_conditionals = Array[ExtResource("5_x7nji")]([SubResource("Resource_djw41")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="Label" type="Label" parent="HFTriggerArea2DEnableBody"]
+offset_left = 78.0
+offset_top = -28.0
+offset_right = 200.0
+offset_bottom = 21.0
+text = "Red
+Press E or Enter"
+
+[node name="Label" type="Label" parent="."]
+offset_left = -538.0
+offset_top = -12.0
+offset_right = -398.0
+offset_bottom = 11.0
+text = "Move with Arrows"
+
+[connection signal="effect_activated" from="Characters/Player1/HFEventListenerBody" to="Characters/Player1" method="set_enabled" binds= [true]]
+[connection signal="effect_deactivated" from="Characters/Player1/HFEventListenerBody" to="Characters/Player1" method="set_enabled" binds= [false]]
+[connection signal="effect_activated" from="Characters/Player2/HFEventListenerArea" to="Characters/Player2" method="set_enabled" binds= [true]]
+[connection signal="effect_deactivated" from="Characters/Player2/HFEventListenerArea" to="Characters/Player2" method="set_enabled" binds= [false]]
+[connection signal="effect_activated" from="ToggleableSprite/HFEventListener" to="ToggleableSprite" method="set_modulate" binds= [Color(0.759333, 0.6259425, 0, 1)]]
+[connection signal="effect_deactivated" from="ToggleableSprite/HFEventListener" to="ToggleableSprite" method="set_modulate" binds= [Color(0.46531904, 0.59731597, 1, 1)]]
+[connection signal="effect_activated" from="HFTriggerArea2DStart/HFEventListener" to="HFTriggerArea2DStart" method="set_deferred" binds= ["monitoring", false]]
+[connection signal="effect_activated" from="HFTriggerArea2DEnableArea/HFEventListener" to="HFTriggerArea2DEnableArea" method="set_deferred" binds= ["monitoring", false]]
+[connection signal="effect_deactivated" from="HFTriggerArea2DEnableArea/HFEventListener" to="HFTriggerArea2DEnableArea" method="set_deferred" binds= ["monitoring", true]]
+[connection signal="effect_activated" from="HFTriggerArea2DEnableBody/HFEventListener" to="HFTriggerArea2DEnableBody" method="set_deferred" binds= ["monitoring", false]]
+[connection signal="effect_deactivated" from="HFTriggerArea2DEnableBody/HFEventListener" to="HFTriggerArea2DEnableBody" method="set_deferred" binds= ["monitoring", true]]

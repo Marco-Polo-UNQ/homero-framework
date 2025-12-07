@@ -1,0 +1,315 @@
+[gd_scene load_steps=38 format=3 uid="uid://dkasglvc0rawi"]
+
+[ext_resource type="Script" uid="uid://cq34jr7x00uu6" path="res://addons/homero_framework/examples/events/3d/character_body_3d_controller.gd" id="1_mpr0e"]
+[ext_resource type="Script" uid="uid://xclbh1qi3odf" path="res://addons/homero_framework/examples/events/3d/node_3d_controller.gd" id="2_yxk6w"]
+[ext_resource type="Script" uid="uid://dvhidmlrusi78" path="res://addons/homero_framework/src/core/components/events/triggers/trigger_area_3d.gd" id="3_7w58p"]
+[ext_resource type="Script" uid="uid://bxnsdhgrj76c2" path="res://addons/homero_framework/src/core/components/events/triggers/event_trigger_group.gd" id="4_372o4"]
+[ext_resource type="Script" uid="uid://okd6y7h6n0lh" path="res://addons/homero_framework/src/core/components/events/listeners/event_listener.gd" id="5_hdjhu"]
+[ext_resource type="Script" uid="uid://biu2pbbfhl4f0" path="res://addons/homero_framework/src/core/components/events/listeners/conditionals/event_conditional.gd" id="6_0i3ax"]
+[ext_resource type="Script" uid="uid://b76jocf8kwod8" path="res://addons/homero_framework/src/core/components/events/listeners/conditionals/condition_all_pass.gd" id="7_45g1f"]
+[ext_resource type="Script" uid="uid://dl3rohcrjprqn" path="res://addons/homero_framework/src/core/components/events/listeners/conditionals/condition_none_pass.gd" id="8_hdjhu"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mpr0e"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_yxk6w"]
+sky_material = SubResource("ProceduralSkyMaterial_mpr0e")
+
+[sub_resource type="Environment" id="Environment_7w58p"]
+background_mode = 2
+sky = SubResource("Sky_yxk6w")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uj8p7"]
+albedo_color = Color(0.19434929, 0.19434926, 0.19434926, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_nw1jo"]
+material = SubResource("StandardMaterial3D_uj8p7")
+size = Vector2(10, 10)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_nw1jo"]
+data = PackedVector3Array(5, 0, 5, -5, 0, 5, 5, 0, -5, -5, 0, 5, -5, 0, -5, 5, 0, -5)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nw1jo"]
+radius = 0.125
+height = 0.5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_nw1jo"]
+radius = 0.125
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0i3ax"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="Resource" id="Resource_372o4"]
+script = ExtResource("7_45g1f")
+event_tags = PackedStringArray("enable_body")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_45g1f"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="Resource" id="Resource_hdjhu"]
+script = ExtResource("7_45g1f")
+event_tags = PackedStringArray("enable_area")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[sub_resource type="Resource" id="Resource_uj8p7"]
+script = ExtResource("4_372o4")
+events_enable = PackedStringArray("enable_body")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="Resource" id="Resource_hsfo2"]
+script = ExtResource("4_372o4")
+events_disable = PackedStringArray("enable_area")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7w58p"]
+
+[sub_resource type="Resource" id="Resource_0i3ax"]
+script = ExtResource("7_45g1f")
+event_tags = PackedStringArray("enable_body")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[sub_resource type="Resource" id="Resource_wxmsx"]
+script = ExtResource("4_372o4")
+events_enable = PackedStringArray("toggle_mesh")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="Resource" id="Resource_7y3ue"]
+script = ExtResource("4_372o4")
+events_disable = PackedStringArray("toggle_mesh")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_372o4"]
+size = Vector3(2, 1, 2)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_6qit4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_372o4"]
+albedo_color = Color(0.5647059, 1, 1, 1)
+
+[sub_resource type="Resource" id="Resource_5vaon"]
+script = ExtResource("8_hdjhu")
+event_tags = PackedStringArray("toggle_mesh")
+metadata/_custom_type_script = "uid://dl3rohcrjprqn"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hdjhu"]
+albedo_color = Color(0.9702807, 0.9475803, 7.70092e-07, 1)
+
+[sub_resource type="Resource" id="Resource_45g1f"]
+script = ExtResource("7_45g1f")
+event_tags = PackedStringArray("toggle_mesh")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[sub_resource type="Resource" id="Resource_aus4c"]
+script = ExtResource("4_372o4")
+events_enable = PackedStringArray("enable_area")
+events_disable = PackedStringArray("enable_body")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hdjhu"]
+size = Vector3(2, 1, 2)
+
+[sub_resource type="Resource" id="Resource_kgr1x"]
+script = ExtResource("7_45g1f")
+event_tags = PackedStringArray("enable_area")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[sub_resource type="Resource" id="Resource_i1fq6"]
+script = ExtResource("4_372o4")
+events_enable = PackedStringArray("enable_body")
+events_disable = PackedStringArray("enable_area")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="Resource" id="Resource_djw41"]
+script = ExtResource("7_45g1f")
+event_tags = PackedStringArray("enable_body")
+metadata/_custom_type_script = "uid://b76jocf8kwod8"
+
+[node name="EventsExample3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7w58p")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.78369343, 0.62114775, 0, -0.62114775, 0.78369343, 0, 5.001, 7.356)
+current = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("PlaneMesh_nw1jo")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_nw1jo")
+
+[node name="Characters" type="Node3D" parent="."]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="Characters"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.535102, 0.25, -2.0954528)
+script = ExtResource("1_mpr0e")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Characters/CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_nw1jo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Characters/CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_nw1jo")
+surface_material_override/0 = SubResource("StandardMaterial3D_0i3ax")
+
+[node name="HFEventListenerBody" type="Node" parent="Characters/CharacterBody3D"]
+script = ExtResource("5_hdjhu")
+listener_conditionals = Array[ExtResource("6_0i3ax")]([SubResource("Resource_372o4")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="Area3D" type="Area3D" parent="Characters"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.535102, 0.25, 2.2004895)
+script = ExtResource("2_yxk6w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Characters/Area3D"]
+shape = SubResource("CapsuleShape3D_nw1jo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Characters/Area3D"]
+mesh = SubResource("CapsuleMesh_nw1jo")
+surface_material_override/0 = SubResource("StandardMaterial3D_45g1f")
+
+[node name="HFEventListenerArea" type="Node" parent="Characters/Area3D"]
+script = ExtResource("5_hdjhu")
+listener_conditionals = Array[ExtResource("6_0i3ax")]([SubResource("Resource_hdjhu")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="Triggers" type="Node3D" parent="."]
+
+[node name="HFTriggerArea3DStart" type="Area3D" parent="Triggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4176085, 0.46034652, -2.096402)
+monitorable = false
+script = ExtResource("3_7w58p")
+collision_bodies = true
+collision_events_on_enter = SubResource("Resource_uj8p7")
+collision_events_on_exit = SubResource("Resource_hsfo2")
+metadata/_custom_type_script = "uid://dvhidmlrusi78"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/HFTriggerArea3DStart"]
+shape = SubResource("BoxShape3D_7w58p")
+
+[node name="HFEventListener" type="Node" parent="Triggers/HFTriggerArea3DStart"]
+script = ExtResource("5_hdjhu")
+listener_conditionals = Array[ExtResource("6_0i3ax")]([SubResource("Resource_0i3ax")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="HFTriggerArea3DToggleMesh" type="Area3D" parent="Triggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6176554, 0, 0)
+script = ExtResource("3_7w58p")
+collision_areas = true
+collision_bodies = true
+collision_events_on_enter = SubResource("Resource_wxmsx")
+collision_events_on_exit = SubResource("Resource_7y3ue")
+metadata/_custom_type_script = "uid://dvhidmlrusi78"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/HFTriggerArea3DToggleMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.614568, 0)
+shape = SubResource("BoxShape3D_372o4")
+
+[node name="MeshInstance3Disabled" type="MeshInstance3D" parent="Triggers/HFTriggerArea3DToggleMesh"]
+mesh = SubResource("PlaneMesh_6qit4")
+skeleton = NodePath("../../HFTriggerArea3DStart")
+surface_material_override/0 = SubResource("StandardMaterial3D_372o4")
+
+[node name="HFEventListenerDisabled" type="Node" parent="Triggers/HFTriggerArea3DToggleMesh/MeshInstance3Disabled"]
+script = ExtResource("5_hdjhu")
+listener_conditionals = Array[ExtResource("6_0i3ax")]([SubResource("Resource_5vaon")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="MeshInstance3Enabled" type="MeshInstance3D" parent="Triggers/HFTriggerArea3DToggleMesh"]
+visible = false
+mesh = SubResource("PlaneMesh_6qit4")
+skeleton = NodePath("../../HFTriggerArea3DStart")
+surface_material_override/0 = SubResource("StandardMaterial3D_hdjhu")
+
+[node name="HFEventListenerEnabled" type="Node" parent="Triggers/HFTriggerArea3DToggleMesh/MeshInstance3Enabled"]
+script = ExtResource("5_hdjhu")
+listener_conditionals = Array[ExtResource("6_0i3ax")]([SubResource("Resource_45g1f")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="HFTriggerArea3DEnableArea" type="Area3D" parent="Triggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1739998, 0, -2.2108612)
+script = ExtResource("3_7w58p")
+interaction_bodies = true
+interaction_events_on_pressed = SubResource("Resource_aus4c")
+metadata/_custom_type_script = "uid://dvhidmlrusi78"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/HFTriggerArea3DEnableArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.614568, 0)
+shape = SubResource("BoxShape3D_hdjhu")
+
+[node name="MeshInstance3Disabled" type="MeshInstance3D" parent="Triggers/HFTriggerArea3DEnableArea"]
+mesh = SubResource("PlaneMesh_6qit4")
+skeleton = NodePath("../../HFTriggerArea3DStart")
+surface_material_override/0 = SubResource("StandardMaterial3D_372o4")
+
+[node name="HFEventListener" type="Node" parent="Triggers/HFTriggerArea3DEnableArea"]
+script = ExtResource("5_hdjhu")
+listener_conditionals = Array[ExtResource("6_0i3ax")]([SubResource("Resource_kgr1x")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="Label3D" type="Label3D" parent="Triggers/HFTriggerArea3DEnableArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6221595, 0)
+billboard = 1
+text = "Green
+Press E or Enter"
+font_size = 64
+
+[node name="HFTriggerArea3DEnableBody" type="Area3D" parent="Triggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.174, 0, 2.211)
+script = ExtResource("3_7w58p")
+interaction_areas = true
+interaction_events_on_pressed = SubResource("Resource_i1fq6")
+metadata/_custom_type_script = "uid://dvhidmlrusi78"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/HFTriggerArea3DEnableBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.615, 0)
+shape = SubResource("BoxShape3D_hdjhu")
+
+[node name="MeshInstance3Disabled" type="MeshInstance3D" parent="Triggers/HFTriggerArea3DEnableBody"]
+mesh = SubResource("PlaneMesh_6qit4")
+skeleton = NodePath("../../HFTriggerArea3DStart")
+surface_material_override/0 = SubResource("StandardMaterial3D_372o4")
+
+[node name="HFEventListener" type="Node" parent="Triggers/HFTriggerArea3DEnableBody"]
+script = ExtResource("5_hdjhu")
+listener_conditionals = Array[ExtResource("6_0i3ax")]([SubResource("Resource_djw41")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="Label3D" type="Label3D" parent="Triggers/HFTriggerArea3DEnableBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6221595, 0)
+billboard = 1
+text = "Red
+Press E or Enter"
+font_size = 64
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.948001, 1.0423772, 0)
+billboard = 1
+text = "Move with arrows"
+font_size = 64
+
+[connection signal="effect_activated" from="Characters/CharacterBody3D/HFEventListenerBody" to="Characters/CharacterBody3D" method="set_enabled" binds= [true]]
+[connection signal="effect_deactivated" from="Characters/CharacterBody3D/HFEventListenerBody" to="Characters/CharacterBody3D" method="set_enabled" binds= [false]]
+[connection signal="effect_activated" from="Characters/Area3D/HFEventListenerArea" to="Characters/Area3D" method="set_enabled" binds= [true]]
+[connection signal="effect_deactivated" from="Characters/Area3D/HFEventListenerArea" to="Characters/Area3D" method="set_enabled" binds= [false]]
+[connection signal="effect_activated" from="Triggers/HFTriggerArea3DStart/HFEventListener" to="Triggers/HFTriggerArea3DStart" method="set_deferred" binds= ["monitoring", false]]
+[connection signal="effect_activated" from="Triggers/HFTriggerArea3DToggleMesh/MeshInstance3Disabled/HFEventListenerDisabled" to="Triggers/HFTriggerArea3DToggleMesh/MeshInstance3Disabled" method="set_visible" binds= [true]]
+[connection signal="effect_deactivated" from="Triggers/HFTriggerArea3DToggleMesh/MeshInstance3Disabled/HFEventListenerDisabled" to="Triggers/HFTriggerArea3DToggleMesh/MeshInstance3Disabled" method="set_visible" binds= [false]]
+[connection signal="effect_activated" from="Triggers/HFTriggerArea3DToggleMesh/MeshInstance3Enabled/HFEventListenerEnabled" to="Triggers/HFTriggerArea3DToggleMesh/MeshInstance3Enabled" method="set_visible" binds= [true]]
+[connection signal="effect_deactivated" from="Triggers/HFTriggerArea3DToggleMesh/MeshInstance3Enabled/HFEventListenerEnabled" to="Triggers/HFTriggerArea3DToggleMesh/MeshInstance3Enabled" method="set_visible" binds= [false]]
+[connection signal="effect_activated" from="Triggers/HFTriggerArea3DEnableArea/HFEventListener" to="Triggers/HFTriggerArea3DEnableArea" method="set_deferred" binds= ["monitoring", false]]
+[connection signal="effect_deactivated" from="Triggers/HFTriggerArea3DEnableArea/HFEventListener" to="Triggers/HFTriggerArea3DEnableArea" method="set_deferred" binds= ["monitoring", true]]
+[connection signal="effect_activated" from="Triggers/HFTriggerArea3DEnableBody/HFEventListener" to="Triggers/HFTriggerArea3DEnableBody" method="set_deferred" binds= ["monitoring", false]]
+[connection signal="effect_deactivated" from="Triggers/HFTriggerArea3DEnableBody/HFEventListener" to="Triggers/HFTriggerArea3DEnableBody" method="set_deferred" binds= ["monitoring", true]]
