@@ -1,0 +1,168 @@
+[gd_resource type="Resource" script_class="HFDialogueSequence" load_steps=35 format=3 uid="uid://d0w5gplcp2ygf"]
+
+[ext_resource type="Script" uid="uid://cs2ywa2xuc73v" path="res://addons/homero_framework/src/core/components/dialogues/dialogue_step.gd" id="1_3nuvu"]
+[ext_resource type="Script" uid="uid://byuf2svhcbr2f" path="res://addons/homero_framework/src/core/components/dialogues/dialogue_option.gd" id="2_3e2bv"]
+[ext_resource type="Script" uid="uid://qxwrqboxfme0" path="res://addons/homero_framework/src/core/components/dialogues/dialogue_speaker.gd" id="3_6crjy"]
+[ext_resource type="Script" uid="uid://dcma1i52wnc8l" path="res://addons/homero_framework/src/core/components/dialogues/dialogue_speaker_resource_default.gd" id="4_fruhn"]
+[ext_resource type="Script" uid="uid://biu2pbbfhl4f0" path="res://addons/homero_framework/src/core/components/events/listeners/conditionals/event_conditional.gd" id="5_nl5sv"]
+[ext_resource type="Script" uid="uid://bxnsdhgrj76c2" path="res://addons/homero_framework/src/core/components/events/triggers/event_trigger_group.gd" id="6_1wkey"]
+[ext_resource type="Script" uid="uid://b76jocf8kwod8" path="res://addons/homero_framework/src/core/components/events/listeners/conditionals/condition_all_pass.gd" id="7_it5vp"]
+[ext_resource type="Script" uid="uid://cmvy5jhppd41q" path="res://addons/homero_framework/src/core/components/dialogues/dialogue_sequence.gd" id="8_tls3l"]
+[ext_resource type="Script" uid="uid://jkgc6r1et4pb" path="res://addons/homero_framework/src/core/components/dialogues/dialogue_starter_step.gd" id="9_o71il"]
+[ext_resource type="Script" uid="uid://dl3rohcrjprqn" path="res://addons/homero_framework/src/core/components/events/listeners/conditionals/condition_none_pass.gd" id="10_v3t52"]
+
+[sub_resource type="Resource" id="Resource_hdinm"]
+script = ExtResource("4_fruhn")
+speaker_name = &"Disembodied voice"
+metadata/_custom_type_script = "uid://dcma1i52wnc8l"
+
+[sub_resource type="Resource" id="Resource_3ducn"]
+script = ExtResource("3_6crjy")
+speaker_data = SubResource("Resource_hdinm")
+graph_position = Vector2(1340, 600)
+
+[sub_resource type="Resource" id="Resource_o3egy"]
+script = ExtResource("1_3nuvu")
+unique_id = 0
+dialogue_key = "Hello, this is a dialogue system test. This demo showcases the properties of the system, how it works and how it interacts with the events system (For more information about events, check the events examples). Press left click to skip this text animation or to continue to the next dialogue step."
+next_step_id = 1
+speaker = SubResource("Resource_3ducn")
+graph_position = Vector2(1220, 300)
+
+[sub_resource type="Resource" id="Resource_gfq3x"]
+script = ExtResource("6_1wkey")
+events_enable = PackedStringArray("dialogue_option_enabled")
+graph_position = Vector2(1860, 340)
+
+[sub_resource type="Resource" id="Resource_3vihj"]
+script = ExtResource("2_3e2bv")
+dialogue_key = &"Loop back and enable the other option"
+next_step_id = 0
+option_events = SubResource("Resource_gfq3x")
+graph_position = Vector2(1660, 200)
+
+[sub_resource type="Resource" id="Resource_s6aud"]
+script = ExtResource("7_it5vp")
+event_tags = PackedStringArray("dialogue_option_enabled")
+graph_position = Vector2(1580, 700)
+
+[sub_resource type="Resource" id="Resource_3xmu0"]
+script = ExtResource("2_3e2bv")
+dialogue_key = &"Continue with the dialogue"
+next_step_id = 2
+enable_conditions = Array[ExtResource("5_nl5sv")]([SubResource("Resource_s6aud")])
+graph_position = Vector2(1660, 460)
+
+[sub_resource type="Resource" id="Resource_s3ebu"]
+script = ExtResource("1_3nuvu")
+unique_id = 1
+dialogue_key = &"As you can see, this dialogue system integrates a basic flowchart feature to create different dialogue flows with their own properties. You can add conditions for starting a dialogue, add a Speaker for each dialogue step, dialogue options for branching paths with possible conditionals, and launch events with each dialogue step or option selected. Here you can see an example of options that are able to loop into a previous dialogue step, trigger events and check for conditionals to enable or disable themselves. Try it!"
+next_step_id = -1
+speaker = SubResource("Resource_3ducn")
+options = Array[ExtResource("2_3e2bv")]([SubResource("Resource_3vihj"), SubResource("Resource_3xmu0")])
+graph_position = Vector2(1440, 300)
+
+[sub_resource type="Resource" id="Resource_d4s3h"]
+script = ExtResource("6_1wkey")
+events_enable = PackedStringArray("alt_dialogue")
+events_disable = PackedStringArray("activate_dialogue", "dialogue_option_enabled")
+graph_position = Vector2(2140, 680)
+
+[sub_resource type="Resource" id="Resource_0cmgy"]
+script = ExtResource("1_3nuvu")
+unique_id = 2
+dialogue_key = "You can also use the dialogue keys in each step, option and anything else as localization keys, and it should integrate seamlessly. When a dialogue flow reaches a dead end, the dialogue is considered to be over and it finishes cleanly. Try continuing and opening this dialogue again!"
+next_step_id = -1
+dialogue_events = SubResource("Resource_d4s3h")
+graph_position = Vector2(1940, 520)
+
+[sub_resource type="Resource" id="Resource_oao3j"]
+script = ExtResource("4_fruhn")
+speaker_name = &"Another voice"
+metadata/_custom_type_script = "uid://dcma1i52wnc8l"
+
+[sub_resource type="Resource" id="Resource_u24gm"]
+script = ExtResource("3_6crjy")
+speaker_data = SubResource("Resource_oao3j")
+graph_position = Vector2(1460, 1420)
+
+[sub_resource type="Resource" id="Resource_t5axi"]
+script = ExtResource("1_3nuvu")
+unique_id = 3
+dialogue_key = &"Dialogue flows can have multiple starting steps with starting conditions, and the system picks up the first valid dialogue flow that it encounters. A starting step with no condition always counts as a valid start. You can use this to nest multiple dialogue flows for the same encounter inside a single file."
+next_step_id = 5
+speaker = SubResource("Resource_u24gm")
+graph_position = Vector2(1200, 1040)
+
+[sub_resource type="Resource" id="Resource_fxgbh"]
+script = ExtResource("6_1wkey")
+events_disable = PackedStringArray("activate_dialogue", "alt_dialogue", "switch_sprite")
+graph_position = Vector2(2240, 1260)
+
+[sub_resource type="Resource" id="Resource_rhqea"]
+script = ExtResource("1_3nuvu")
+unique_id = 4
+dialogue_key = "This dialogue resource can also be saved as an independent file, so you can avoid bloating your main scene file and merging conflicts. Some internal resources, like the Speakers, can also be saved separately so you can reuse them more easily. This dialogue flow is set to reset after finishing, triggering the original dialogue flow, but you can mix and match events, loop around inside dialogue flows, etc. Never forget to put some exit condition, so as to not end up in an infinite loop! Another detail to consider, the dialogue system only covers the underlying logic, leaving the end user UI implementation up to the developer, so as to not constraint the possibilities. You can use this demo as an example of a valid UI, or create your own implementation with custom logic."
+next_step_id = -1
+speaker = SubResource("Resource_u24gm")
+dialogue_events = SubResource("Resource_fxgbh")
+graph_position = Vector2(2020, 1120)
+
+[sub_resource type="Resource" id="Resource_n8444"]
+script = ExtResource("1_3nuvu")
+unique_id = 5
+dialogue_key = &"As seen in the events system, the conditionals can be extended to handle any number and type of conditions. The dialogue editor supports adding custom conditionals as long as they extend from the conditionals base class. The events triggered from dialogue steps can also affect anything outside the dialogue context, as it interacts directly with the global events system. Watch this!"
+next_step_id = 6
+speaker = SubResource("Resource_u24gm")
+graph_position = Vector2(1500, 1040)
+
+[sub_resource type="Resource" id="Resource_30y8x"]
+script = ExtResource("6_1wkey")
+events_enable = PackedStringArray("switch_sprite")
+graph_position = Vector2(1940, 960)
+
+[sub_resource type="Resource" id="Resource_23a6i"]
+script = ExtResource("4_fruhn")
+speaker_name = &"Surprised Pikachu Voice"
+metadata/_custom_type_script = "uid://dcma1i52wnc8l"
+
+[sub_resource type="Resource" id="Resource_ba530"]
+script = ExtResource("3_6crjy")
+speaker_data = SubResource("Resource_23a6i")
+graph_position = Vector2(1980, 1420)
+
+[sub_resource type="Resource" id="Resource_iudye"]
+script = ExtResource("1_3nuvu")
+unique_id = 6
+dialogue_key = &"Tada! Any events from outside the dialogue system can also affect the conditionals checks inside the dialogue system, like the starting conditionals or the options available. Maybe you needed a special item to trigger a new dialogue option? Just add the condition, raise the event when grabbing the item and voilá!"
+next_step_id = 4
+speaker = SubResource("Resource_ba530")
+dialogue_events = SubResource("Resource_30y8x")
+graph_position = Vector2(1780, 1080)
+
+[sub_resource type="Resource" id="Resource_hom4h"]
+script = ExtResource("10_v3t52")
+event_tags = PackedStringArray("alt_dialogue")
+graph_position = Vector2(760, 420)
+
+[sub_resource type="Resource" id="Resource_a08vy"]
+script = ExtResource("9_o71il")
+enable_conditions = Array[ExtResource("5_nl5sv")]([SubResource("Resource_hom4h")])
+graph_position = Vector2(975.548, 308.73062)
+
+[sub_resource type="Resource" id="Resource_kdbkf"]
+script = ExtResource("7_it5vp")
+event_tags = PackedStringArray("alt_dialogue")
+graph_position = Vector2(700, 1120)
+
+[sub_resource type="Resource" id="Resource_43t5r"]
+script = ExtResource("9_o71il")
+step_id = 3
+enable_conditions = Array[ExtResource("5_nl5sv")]([SubResource("Resource_kdbkf")])
+graph_position = Vector2(960, 1060)
+
+[resource]
+script = ExtResource("8_tls3l")
+starting_steps = Array[ExtResource("9_o71il")]([SubResource("Resource_a08vy"), SubResource("Resource_43t5r")])
+dialogue_steps = Array[ExtResource("1_3nuvu")]([SubResource("Resource_o3egy"), SubResource("Resource_s3ebu"), SubResource("Resource_0cmgy"), SubResource("Resource_t5axi"), SubResource("Resource_rhqea"), SubResource("Resource_n8444"), SubResource("Resource_iudye")])
+metadata/_custom_type_script = "uid://cmvy5jhppd41q"

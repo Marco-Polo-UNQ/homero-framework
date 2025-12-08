@@ -26,14 +26,10 @@ func set_dialogue_manager(manager: HFDialogueManager) -> void:
 
 func notify_exit() -> void:
 	animation_player.play(&"end_dialogue")
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 func _on_dialogue_manager_sequence_activated() -> void:
-	print("Dialogue UI sequence activated")
 	animation_player.play(&"start_dialogue")
-	EventsManager.toggle_event("pause_player", true)
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
 func _load_dialogue_step(dialogue_step: HFDialogueStep) -> void:

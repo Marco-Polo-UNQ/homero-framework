@@ -211,18 +211,21 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 toggle_mode = true
 text = "option 1"
+autowrap_mode = 3
 
 [node name="OptionButton2" type="Button" parent="Container/DialoguePanel/OptionsControl/OptionsContainer"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "option 1"
+autowrap_mode = 3
 
 [node name="OptionButton3" type="Button" parent="Container/DialoguePanel/OptionsControl/OptionsContainer"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "option 1"
+autowrap_mode = 3
 
 [node name="DialogueText" type="Label" parent="Container/DialoguePanel"]
 unique_name_in_owner = true
