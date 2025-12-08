@@ -1,0 +1,238 @@
+[gd_scene load_steps=9 format=3 uid="uid://b1thh3nhmko42"]
+
+[ext_resource type="Script" uid="uid://6ukcv1223mg5" path="res://addons/homero_framework/examples/dialogue/dialogue_display_example.gd" id="1_p0gq6"]
+
+[sub_resource type="Animation" id="Animation_xockr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Container/DialoguePanel:anchor_top")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.9]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Container/DialoguePanel:anchor_bottom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.9]
+}
+
+[sub_resource type="Animation" id="Animation_yfmxk"]
+resource_name = "end_dialogue"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Container/DialoguePanel:anchor_top")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.4, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.9, 1.9]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Container/DialoguePanel:anchor_bottom")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.4, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.9, 1.9]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_remove_ui"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_vl3d5"]
+resource_name = "start_dialogue"
+length = 1.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Container/DialoguePanel:anchor_top")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [1.9, 0.9]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Container/DialoguePanel:anchor_bottom")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [1.9, 0.9]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_t8l07"]
+_data = {
+&"RESET": SubResource("Animation_xockr"),
+&"end_dialogue": SubResource("Animation_yfmxk"),
+&"start_dialogue": SubResource("Animation_vl3d5")
+}
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uyjd3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p0gq6"]
+bg_color = Color(0, 0, 0, 0.2509804)
+
+[sub_resource type="LabelSettings" id="LabelSettings_8gfqy"]
+font_size = 24
+
+[node name="DialogueDisplayExample" type="CanvasLayer"]
+script = ExtResource("1_p0gq6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_t8l07")
+}
+
+[node name="DialogueTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.05
+
+[node name="Container" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="ContinueButton" type="Button" parent="Container"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_uyjd3")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_uyjd3")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_uyjd3")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_uyjd3")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uyjd3")
+
+[node name="DialoguePanel" type="PanelContainer" parent="Container"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 1.9
+anchor_right = 0.7
+anchor_bottom = 1.9
+offset_left = -0.200005
+offset_top = -139.2
+offset_right = 0.200073
+offset_bottom = -10.2
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_p0gq6")
+
+[node name="Speaker" type="Control" parent="Container/DialoguePanel"]
+layout_mode = 2
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="SpeakerNameLabel" type="Label" parent="Container/DialoguePanel/Speaker"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -10.0
+offset_top = -92.0
+offset_right = 365.0
+offset_bottom = -17.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_p0gq6")
+text = "lorem ipsum"
+label_settings = SubResource("LabelSettings_8gfqy")
+vertical_alignment = 1
+
+[node name="OptionsControl" type="Control" parent="Container/DialoguePanel"]
+layout_mode = 2
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="OptionsContainer" type="VBoxContainer" parent="Container/DialoguePanel/OptionsControl"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 23.299866
+offset_top = -197.0
+offset_right = 314.3
+offset_bottom = 21.0
+grow_vertical = 0
+mouse_filter = 2
+alignment = 1
+
+[node name="OptionButton" type="Button" parent="Container/DialoguePanel/OptionsControl/OptionsContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+toggle_mode = true
+text = "option 1"
+
+[node name="OptionButton2" type="Button" parent="Container/DialoguePanel/OptionsControl/OptionsContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "option 1"
+
+[node name="OptionButton3" type="Button" parent="Container/DialoguePanel/OptionsControl/OptionsContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "option 1"
+
+[node name="DialogueText" type="Label" parent="Container/DialoguePanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+autowrap_mode = 2
+visible_characters = 0
+visible_ratio = 0.0
+
+[connection signal="timeout" from="DialogueTimer" to="." method="_animate_dialogue"]
+[connection signal="pressed" from="Container/ContinueButton" to="." method="_on_continue_button_pressed"]

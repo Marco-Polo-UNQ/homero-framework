@@ -1,0 +1,70 @@
+[gd_scene load_steps=14 format=3 uid="uid://xc76hvl0cqjv"]
+
+[ext_resource type="Script" uid="uid://bsm3lue53w630" path="res://addons/homero_framework/src/core/components/dialogues/dialogue_manager.gd" id="1_e8e6j"]
+[ext_resource type="Resource" uid="uid://ngmoan2of035" path="res://addons/homero_framework/examples/dialogue/dialogue_example.tres" id="2_naq6c"]
+[ext_resource type="Texture2D" uid="uid://dblav2tlyvw3y" path="res://icon.svg" id="2_wh8e7"]
+[ext_resource type="Script" uid="uid://okd6y7h6n0lh" path="res://addons/homero_framework/src/core/components/events/listeners/event_listener.gd" id="3_t1i6t"]
+[ext_resource type="Script" uid="uid://bn0nucb8sysr1" path="res://addons/homero_framework/src/core/components/events/triggers/trigger_area_2d.gd" id="3_yuj18"]
+[ext_resource type="Script" uid="uid://bxnsdhgrj76c2" path="res://addons/homero_framework/src/core/components/events/triggers/event_trigger_group.gd" id="4_kqwah"]
+[ext_resource type="Script" uid="uid://biu2pbbfhl4f0" path="res://addons/homero_framework/src/core/components/events/listeners/conditionals/event_conditional.gd" id="4_w78a6"]
+[ext_resource type="PackedScene" uid="uid://b1thh3nhmko42" path="res://addons/homero_framework/examples/dialogue/dialogue_display_example.tscn" id="5_w78a6"]
+[ext_resource type="Script" uid="uid://y4k6ermba6v8" path="res://addons/homero_framework/src/core/components/events/listeners/conditionals/condition_at_least_one_pass.gd" id="8_o8ol7"]
+
+[sub_resource type="Resource" id="Resource_2i65e"]
+script = ExtResource("8_o8ol7")
+event_tags = PackedStringArray("activate_dialogue")
+metadata/_custom_type_script = "uid://y4k6ermba6v8"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kqwah"]
+size = Vector2(32, 32)
+
+[sub_resource type="Resource" id="Resource_yuj18"]
+script = ExtResource("4_kqwah")
+events_enable = PackedStringArray("activate_dialogue")
+metadata/_custom_type_script = "uid://bxnsdhgrj76c2"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w78a6"]
+size = Vector2(128, 128)
+
+[node name="DialogueExample" type="Node2D"]
+metadata/_edit_lock_ = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="HFDialogueManager" type="Node" parent="."]
+script = ExtResource("1_e8e6j")
+dialogue_sequence = ExtResource("2_naq6c")
+dialogue_display_scene = ExtResource("5_w78a6")
+metadata/_custom_type_script = "uid://bsm3lue53w630"
+
+[node name="HFEventListener" type="Node" parent="HFDialogueManager"]
+script = ExtResource("3_t1i6t")
+listener_conditionals = Array[ExtResource("4_w78a6")]([SubResource("Resource_2i65e")])
+metadata/_custom_type_script = "uid://okd6y7h6n0lh"
+
+[node name="Player" type="Area2D" parent="."]
+z_index = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("RectangleShape2D_kqwah")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_wh8e7")
+
+[node name="HFTriggerArea2DActivateDialogue" type="Area2D" parent="."]
+monitorable = false
+script = ExtResource("3_yuj18")
+interaction_areas = true
+interaction_events_on_pressed = SubResource("Resource_yuj18")
+metadata/_custom_type_script = "uid://bn0nucb8sysr1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HFTriggerArea2DActivateDialogue"]
+shape = SubResource("RectangleShape2D_w78a6")
+
+[node name="ColorRect" type="ColorRect" parent="HFTriggerArea2DActivateDialogue"]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+color = Color(1, 1, 1, 0.44705883)
