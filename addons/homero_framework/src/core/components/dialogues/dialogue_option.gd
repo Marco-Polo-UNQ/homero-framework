@@ -14,7 +14,7 @@ signal option_selected(dialogue_key: StringName, next_step_id: int)
 @export var dialogue_key: StringName
 ## The internal id of the next [HFDialogueStep] to go to if this
 ## option is selected.
-@export var next_step_id: int
+@export var next_step_id: int = -1
 ## Conditions that must be met for this option to be enabled.
 @export var enable_conditions: Array[HFEventConditional]
 
@@ -28,7 +28,7 @@ signal option_selected(dialogue_key: StringName, next_step_id: int)
 # Resource constructor.
 func _init(
 	p_dialogue_key: StringName = "",
-	p_next_step_id: int = 0,
+	p_next_step_id: int = -1,
 	p_enable_conditions: Array[HFEventConditional] = [],
 	p_option_events: HFEventTriggerGroup = null,
 	p_graph_position: Vector2 = Vector2.ZERO

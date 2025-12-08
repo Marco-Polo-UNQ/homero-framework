@@ -60,7 +60,10 @@ func handle_condition_connection(
 	is_new: bool = false
 ) -> void:
 	if is_new && !option_data.enable_conditions.has(condition_node.condition_data):
-		option_data.enable_conditions.push_back(condition_node.condition_data)
+		# Ugly list copy to fix inconsistent array save state
+		var list_copy: Array[HFEventConditional] = option_data.enable_conditions.duplicate(false)
+		list_copy.push_back(condition_node.condition_data)
+		option_data.enable_conditions = list_copy
 	
 	if option_data.enable_conditions.has(condition_node.condition_data):
 		condition_node.handle_connect_to_element(self, 1)
@@ -70,7 +73,7 @@ func handle_condition_connection(
 ## Handles disconnection from a condition node.
 func handle_condition_disconnection(condition_node: HFDiagEditConditionalNode) -> void:
 	if option_data.enable_conditions.has(condition_node.condition_data):
-		option_data.enable_conditions.erase(condition_node.condition_data)
+		_on_condition_removed(condition_node.condition_data)
 		if condition_node.delete_called.is_connected(_on_condition_removed):
 			condition_node.delete_called.disconnect(_on_condition_removed)
 		condition_node.handle_disconnect_to_element(self, 1)
@@ -174,7 +177,10 @@ func _on_next_step_node_deleted(deleted_step: HFDialogueStep) -> void:
 
 
 func _on_condition_removed(condition_data: HFEventConditional) -> void:
-	option_data.enable_conditions.erase(condition_data)
+	# Ugly list copy to fix inconsistent array save state
+	var list_copy: Array[HFEventConditional] = option_data.enable_conditions.duplicate(false)
+	list_copy.erase(condition_data)
+	option_data.enable_conditions = list_copy
 
 
 func _on_dialogue_event_deleted(event: HFEventTriggerGroup) -> void:

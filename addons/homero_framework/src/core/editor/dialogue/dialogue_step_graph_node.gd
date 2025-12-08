@@ -85,7 +85,10 @@ func handle_option_connection(
 	is_new: bool = false
 ) -> void:
 	if is_new && !step_data.options.has(option_node.option_data):
-		step_data.options.push_back(option_node.option_data)
+		# Ugly list copy to fix inconsistent array save state
+		var list_copy: Array[HFDialogueOption] = step_data.options.duplicate(false)
+		list_copy.push_back(option_node.option_data)
+		step_data.options = list_copy
 	
 	if step_data.options.has(option_node.option_data):
 		connect_ports_requested.emit(
@@ -226,8 +229,10 @@ func _on_speaker_deleted(speaker_data: HFDialogueSpeaker) -> void:
 
 
 func _on_option_deleted(option_data: HFDialogueOption) -> void:
-	if step_data.options.has(option_data):
-		step_data.options.erase(option_data)
+	# Ugly list copy to fix inconsistent array save state
+	var list_copy: Array[HFDialogueOption] = step_data.options.duplicate(false)
+	list_copy.erase(option_data)
+	step_data.options = list_copy
 
 
 func _on_dialogue_event_deleted(dialogue_data: HFEventTriggerGroup) -> void:

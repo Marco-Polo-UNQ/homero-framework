@@ -149,6 +149,7 @@ func _initialize_dialogue_step(
 		other_step.handle_step_connection(step_node)
 		for option_node: HFDiagEditDialogueOptionNode in options:
 			option_node.handle_step_connection(step_node)
+			option_node.handle_step_connection(other_step)
 
 
 func _verify_link_and_connect(
@@ -327,10 +328,15 @@ func _on_main_graph_delete_nodes_request(nodes: Array[StringName]) -> void:
 					connection.to_port
 				)
 		
+		# Ugly list copy to fix inconsistent array save state
 		if node is HFDiagEditStartingStepNode:
-			dialogue_sequence.starting_steps.erase(node.starter_step_data)
+			var list_copy: Array[HFDialogueStarterStep] = dialogue_sequence.starting_steps.duplicate(false)
+			list_copy.erase(node.starter_step_data)
+			dialogue_sequence.starting_steps = list_copy
 		elif node is HFDiagEditDialogueStepNode:
-			dialogue_sequence.dialogue_steps.erase(node.step_data)
+			var list_copy: Array[HFDialogueStep] = dialogue_sequence.dialogue_steps.duplicate(false)
+			list_copy.erase(node.step_data)
+			dialogue_sequence.dialogue_steps = list_copy
 		
 		main_graph.remove_child(node)
 		node.queue_free()
@@ -346,7 +352,10 @@ func _on_new_graph_node_popup_new_starting_step_requested() -> void:
 	_add_new_graph_node(
 		starting_step_node_scene, new_starting_step, _get_graph_local_mouse_position()
 	)
-	dialogue_sequence.starting_steps.push_back(new_starting_step)
+	# Ugly list copy to fix inconsistent array save state
+	var list_copy: Array[HFDialogueStarterStep] = dialogue_sequence.starting_steps.duplicate(false)
+	list_copy.push_back(new_starting_step)
+	dialogue_sequence.starting_steps = list_copy
 
 
 func _on_new_graph_node_popup_new_dialogue_step_requested() -> void:
@@ -362,7 +371,10 @@ func _on_new_graph_node_popup_new_dialogue_step_requested() -> void:
 		for other_step: HFDialogueStep in dialogue_sequence.dialogue_steps:
 			exists = exists || other_step.unique_id == index
 	new_step.unique_id = index
-	dialogue_sequence.dialogue_steps.push_back(new_step)
+	# Ugly list copy to fix inconsistent array save state
+	var list_copy: Array[HFDialogueStep] = dialogue_sequence.dialogue_steps.duplicate(false)
+	list_copy.push_back(new_step)
+	dialogue_sequence.dialogue_steps = list_copy
 
 
 func _on_new_graph_node_popup_new_dialogue_speaker_requested() -> void:
