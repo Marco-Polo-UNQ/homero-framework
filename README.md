@@ -23,7 +23,7 @@ This repository also contains a comprehensive test suite under [tests](tests) us
 ## Features
 
 - Screen loading and management
-  - There are 3 main components of this system, the [ScreenManager](addons/homero_framework/src/core/components/screens/screen_manager.gd) that serves as a state machine handling the different [ScreenLoaders](addons/homero_framework/src/core/components/screens/screen_loader.gd), that in turn hold weak references that don't preload the dependencies to memory of scenes that implement the [Screen](addons/homero_framework/src/core/components/screens/screen.gd) class. This gives the ability to define 
+  - There are 3 main components of this system, the [ScreenManager](addons/homero_framework/src/core/components/screens/screen_manager.gd) that serves as a state machine handling the different [ScreenLoaders](addons/homero_framework/src/core/components/screens/screen_loader.gd), that in turn hold weak references that don't preload the dependencies to memory of scenes that implement the [Screen](addons/homero_framework/src/core/components/screens/screen.gd) class.
   - The plugin creates or validates a typed screen constants script at [screens_constants.gd](screens_constants.gd) (class name: HFScreenConstants with enum SCREENS) to be used by screen loaders/managers, editable by the user.
 
 - Events management system
