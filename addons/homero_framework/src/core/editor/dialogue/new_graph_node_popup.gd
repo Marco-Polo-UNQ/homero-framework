@@ -42,7 +42,8 @@ func setup(point: Vector2) -> void:
 		if class_dict.base == "HFEventConditional" && class_dict.class != "HFEventConditional":
 			var new_button: Button = Button.new()
 			conditionals_buttons_container.add_child(new_button)
-			new_button.text = class_dict.class
+			var base_name: String = class_dict.class as String
+			new_button.text = base_name.trim_prefix("HF").trim_prefix("Condition").capitalize()
 			new_button.pressed.connect(_on_dialogue_conditional_button_pressed.bind(class_dict.path))
 
 

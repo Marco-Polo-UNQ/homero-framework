@@ -34,7 +34,8 @@ func setup(p_condition_data: HFEventConditional) -> void:
 	var script: Script = condition_data.get_script() as Script
 	for class_data: Dictionary in global_class_list:
 		if class_data.path == script.resource_path:
-			title = class_data.class
+			var base_name: String = class_data.class as String
+			title = base_name.trim_prefix("HF").capitalize()
 			break
 
 

@@ -79,7 +79,7 @@ func test_dialogue_conditional_graph_node_can_setup() -> void:
 	)
 	assert_eq(
 		dialogue_conditional_graph_node.title,
-		"HFConditionAllPass"
+		"Condition All Pass"
 	)
 
 
