@@ -1,6 +1,6 @@
 # Homero Framework
 
-Editor tools and runtime components for Godot 4 focused on:
+Editor tools and runtime components for Godot 4.5+ focused on:
 - Visual dialogue authoring and runtime dialogue resources
 - Screen loading/management with typed screen constants
 - Project initialization helpers (Events autoload, screen constants)
@@ -12,11 +12,8 @@ This repository also contains a comprehensive test suite under [tests](tests) us
 
 - [Features](#features)
 - [Installation](#installation)
-- [Dialogue system](#dialogue-system)
-- [Screen system](#screen-system)
-- [Version checking](#version-checking-editor)
+- [Examples](#examples)
 - [Tests](#tests)
-- [Repository structure](#repository-structure)
 - [License](#license)
 
 
@@ -35,8 +32,7 @@ This repository also contains a comprehensive test suite under [tests](tests) us
   - The Dialogue System can interact with the Events system, being able to toggle different dialogue paths, starting points and options depending of the events state, and also being able to activate or deactivate different events according to the current dialogue step or option selected.
   - All this can be set up using an integrated graph editor plugin that opens right in the Godot Editor IDE.
 
-- Automatic version checking in the Editor, checking against the published Github repository.
-
+- Automatic version checking in the Editor, checking against the published Github repository (you can disable it from [the plugin file](addons/homero_framework/plugin.gd)).
 
 
 ## Installation
@@ -48,6 +44,10 @@ This repository also contains a comprehensive test suite under [tests](tests) us
    - Ensures a screens constants file exists at [screens_constants.gd](screens_constants.gd) with an `HFScreenConstants` class and a `SCREENS` enum.
    - Registers the EventsManager autoload from [addons/homero_framework/src/core/components/events/events_manager.gd](addons/homero_framework/src/core/components/events/events_manager.gd).
 
+
+## Examples
+
+You can see implementation examples [here](addons/homero_framework/examples).
 
 ## Tests
 

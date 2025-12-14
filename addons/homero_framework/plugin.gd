@@ -35,9 +35,6 @@ func _enter_tree() -> void:
 		_get_default_screen_constants_content()
 	)
 	
-	version_checker = VERSION_CHECKER_SCENE.instantiate()
-	add_control_to_container(EditorPlugin.CONTAINER_CANVAS_EDITOR_BOTTOM, version_checker)
-	
 	dialogue_editor_inspector_plugin = DIALOGUE_EDITOR_INSPECTOR_PLUGIN_SCRIPT.new()
 	dialogue_editor_inspector_plugin.edit_called.connect(_on_dialogue_editor_inspector_plugin_edit_called)
 	add_inspector_plugin(dialogue_editor_inspector_plugin)
@@ -45,7 +42,11 @@ func _enter_tree() -> void:
 	add_autoload_singleton(EVENTS_MANAGER_SINGLETON_NAME, EVENTS_MANAGER_PATH)
 	
 	var plugin_version: String = get_plugin_version()
-	version_checker.check_version(plugin_version)
+	
+	if (true): # Set this to false if you wish to stop receiving updates notifications.
+		version_checker = VERSION_CHECKER_SCENE.instantiate()
+		add_control_to_container(EditorPlugin.CONTAINER_CANVAS_EDITOR_BOTTOM, version_checker)
+		version_checker.check_version(plugin_version)
 	
 	HFLog.d("Loaded successfully, current version %s" % plugin_version)
 
